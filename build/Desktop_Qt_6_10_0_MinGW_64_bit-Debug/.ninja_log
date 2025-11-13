@@ -1,0 +1,19 @@
+# ninja log v6
+3	544	7847676166899130	build.ninja	81ceb4ff983b145a
+15	379	7847675993182953	D:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/BazyDanychJachtyApp_autogen/mocs_compilation.cpp	8acb3416775ed683
+15	379	7847675993182953	BazyDanychJachtyApp_autogen/timestamp	8acb3416775ed683
+15	379	7847675993182953	D:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/BazyDanychJachtyApp_autogen/timestamp	8acb3416775ed683
+15	379	7847675993182953	BazyDanychJachtyApp_autogen/mocs_compilation.cpp	8acb3416775ed683
+379	1809	7847675993685566	CMakeFiles/BazyDanychJachtyApp.dir/BazyDanychJachtyApp_autogen/mocs_compilation.cpp.obj	ce3faa6fa05ec017
+383	1894	7847675993720981	CMakeFiles/BazyDanychJachtyApp.dir/mainwindow.cpp.obj	3253730775fffc2e
+381	1809	7847675993705792	CMakeFiles/BazyDanychJachtyApp.dir/main.cpp.obj	29900cbf9ead15ea
+1895	2035	7847676008839793	BazyDanychJachtyApp.exe	c46e7844296c65c1
+15	554	7847676166899130	build.ninja	81ceb4ff983b145a
+16	387	7847676170743518	BazyDanychJachtyApp_autogen/timestamp	8acb3416775ed683
+16	387	7847676170743518	BazyDanychJachtyApp_autogen/mocs_compilation.cpp	8acb3416775ed683
+16	387	7847676170743518	D:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/BazyDanychJachtyApp_autogen/timestamp	8acb3416775ed683
+16	387	7847676170743518	D:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/BazyDanychJachtyApp_autogen/mocs_compilation.cpp	8acb3416775ed683
+390	1882	7847676171272972	CMakeFiles/BazyDanychJachtyApp.dir/main.cpp.obj	7ddfef725b0d1704
+388	1888	7847676171257664	CMakeFiles/BazyDanychJachtyApp.dir/BazyDanychJachtyApp_autogen/mocs_compilation.cpp.obj	422dffdd7ca7d48e
+392	1936	7847676171293387	CMakeFiles/BazyDanychJachtyApp.dir/mainwindow.cpp.obj	bddc9a94f93d8cf6
+1936	2069	7847676186733278	BazyDanychJachtyApp.exe	6337a3db36b11de0

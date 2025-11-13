@@ -7,7 +7,7 @@
 				{
 					"build" : ".",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-.-Debug-107795cb3d778213eabb.json",
+					"jsonFile" : "directory-.-Debug-99cd7a855abb8d9e1ba3.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.16"
@@ -44,7 +44,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "BazyDanychJachtyApp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-BazyDanychJachtyApp-Debug-52541bfc0287774f377f.json",
+					"jsonFile" : "target-BazyDanychJachtyApp-Debug-32644d97505c6932ab55.json",
 					"name" : "BazyDanychJachtyApp",
 					"projectIndex" : 0
 				},
