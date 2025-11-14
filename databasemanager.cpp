@@ -1,7 +1,6 @@
 #include "databasemanager.h"
 
 DatabaseManager::DatabaseManager() {
-    // loadConfig("config.json");
     loadConfig(QDir::currentPath() + "/../../config.json");
 }
 
@@ -33,7 +32,6 @@ bool DatabaseManager::connect() {
     m_db.setDatabaseName(databaseName);
     m_db.setUserName(username);
     m_db.setPassword(password);
-    // m_db.setPassword("");
 
 
     if (!m_db.open()) {
