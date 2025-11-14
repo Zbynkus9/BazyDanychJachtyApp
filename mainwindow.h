@@ -2,9 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSql>
-#include <QSqlDatabase>
-#include <QDebug>
+#include "databasemanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,7 +18,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    DatabaseManager dbManager;
 };
 #endif // MAINWINDOW_H

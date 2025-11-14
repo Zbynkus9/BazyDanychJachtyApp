@@ -14,18 +14,18 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 find_package(MySQL)
 
 # Optionally locate MySQL
-find_path(MySQL_INCLUDE_DIR NAMES mysql.h
-          HINTS "C:/Program Files/MySQL/MySQL Connector C 6.1/include")
-find_library(MySQL_LIBRARIES NAMES mysql
-             HINTS "C:/Program Files/MySQL/MySQL Connector C 6.1/lib")
+# find_path(MySQL_INCLUDE_DIR NAMES mysql.h
+#           HINTS "C:/Program Files/MySQL/MySQL Connector C 6.1/include")
+# find_library(MySQL_LIBRARIES NAMES mysql
+#              HINTS "C:/Program Files/MySQL/MySQL Connector C 6.1/lib")
 
 
-if(NOT MySQL_INCLUDE_DIR OR NOT MySQL_LIBRARIES)
-    message(FATAL_ERROR "MySQL Connector/C not found. Please install and set paths.")
-endif()
+# if(NOT MySQL_INCLUDE_DIR OR NOT MySQL_LIBRARIES)
+#     message(FATAL_ERROR "MySQL Connector/C not found. Please install and set paths.")
+# endif()
 
-include_directories(${MySQL_INCLUDE_DIR})
-link_libraries(${MySQL_LIBRARIES})
+# include_directories(${MySQL_INCLUDE_DIR})
+# link_libraries(${MySQL_LIBRARIES})
 
 set(PROJECT_SOURCES
         main.cpp
@@ -39,6 +39,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(BazyDanychJachtyApp
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        databasemanager.h
+        databasemanager.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET BazyDanychJachtyApp APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
