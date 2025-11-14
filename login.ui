@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>762</width>
+    <height>525</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>762</width>
+    <height>525</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="horizontalSpacing">
+    <number>50</number>
+   </property>
+   <item row="1" column="0" colspan="2">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QGroupBox" name="LoginBoxV">
+     <property name="title">
+      <string>Zaloguj się</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <layout class="QVBoxLayout" name="LoginLoginLayoutV">
+        <item>
+         <widget class="QLabel" name="LoginLoginLaber">
+          <property name="text">
+           <string>Login</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LoginLoginText"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="LoginPassLayoutV">
+        <item>
+         <widget class="QLabel" name="LoginPassLabel">
+          <property name="text">
+           <string>Hasło</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LoginPassText"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="LoginBTN">
+        <property name="text">
+         <string>Zaloguj się</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="MainLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Login Screen</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="RegisterBox">
+     <property name="title">
+      <string>Zarejestruj się</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_9">
+      <item>
+       <layout class="QVBoxLayout" name="RegLoginLayoutV">
+        <item>
+         <widget class="QLabel" name="RegLoginLabel">
+          <property name="text">
+           <string>Login</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="RegLoginText"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="RegPassLayoutV">
+        <item>
+         <widget class="QLabel" name="RegPassLabel">
+          <property name="text">
+           <string>Hasło</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="RegPassText"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="RegEmailLayoutV">
+        <item>
+         <widget class="QLabel" name="RegEmailLabel">
+          <property name="text">
+           <string>Email</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="RegEmailText"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="RegNrLayoutV">
+        <item>
+         <widget class="QLabel" name="RegNrLabel">
+          <property name="text">
+           <string>Numer telefonu</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="RegNrText"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="RegisterBTN">
+        <property name="text">
+         <string>Zarejestruj się</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>LoginBTN</tabstop>
+  <tabstop>RegisterBTN</tabstop>
+  <tabstop>LoginLoginText</tabstop>
+  <tabstop>RegLoginText</tabstop>
+  <tabstop>LoginPassText</tabstop>
+  <tabstop>RegPassText</tabstop>
+  <tabstop>RegEmailText</tabstop>
+  <tabstop>RegNrText</tabstop>
+  <tabstop>lineEdit_7</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

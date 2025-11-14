@@ -11,8 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     qDebug() << QSqlDatabase::drivers();
 
-
-
 }
 
 MainWindow::~MainWindow()
@@ -20,7 +18,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_ConnectBTN_clicked()
 {
     if (dbManager.connect()) {
         QMessageBox::information(this, "Connection", "Connected to MySQL successfully!");

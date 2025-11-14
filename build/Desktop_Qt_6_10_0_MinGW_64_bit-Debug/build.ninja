@@ -81,6 +81,14 @@ build CMakeFiles/BazyDanychJachtyApp.dir/databasemanager.cpp.obj: CXX_COMPILER__
   OBJECT_DIR = CMakeFiles\BazyDanychJachtyApp.dir
   OBJECT_FILE_DIR = CMakeFiles\BazyDanychJachtyApp.dir
 
+build CMakeFiles/BazyDanychJachtyApp.dir/login.cpp.obj: CXX_COMPILER__BazyDanychJachtyApp_unscanned_Debug D$:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/login.cpp || cmake_object_order_depends_target_BazyDanychJachtyApp
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\BazyDanychJachtyApp.dir\login.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -ID:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/BazyDanychJachtyApp_autogen/include -isystem D:/Qt/6.10.0/mingw_64/include/QtCore -isystem D:/Qt/6.10.0/mingw_64/include -isystem D:/Qt/6.10.0/mingw_64/mkspecs/win32-g++ -isystem D:/Qt/6.10.0/mingw_64/include/QtWidgets -isystem D:/Qt/6.10.0/mingw_64/include/QtGui -isystem D:/Qt/6.10.0/mingw_64/include/QtSql
+  OBJECT_DIR = CMakeFiles\BazyDanychJachtyApp.dir
+  OBJECT_FILE_DIR = CMakeFiles\BazyDanychJachtyApp.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target BazyDanychJachtyApp
@@ -89,7 +97,7 @@ build CMakeFiles/BazyDanychJachtyApp.dir/databasemanager.cpp.obj: CXX_COMPILER__
 #############################################
 # Link the executable BazyDanychJachtyApp.exe
 
-build BazyDanychJachtyApp.exe: CXX_EXECUTABLE_LINKER__BazyDanychJachtyApp_Debug CMakeFiles/BazyDanychJachtyApp.dir/BazyDanychJachtyApp_autogen/mocs_compilation.cpp.obj CMakeFiles/BazyDanychJachtyApp.dir/main.cpp.obj CMakeFiles/BazyDanychJachtyApp.dir/mainwindow.cpp.obj CMakeFiles/BazyDanychJachtyApp.dir/databasemanager.cpp.obj | D$:/Qt/6.10.0/mingw_64/lib/libQt6Widgets.a D$:/Qt/6.10.0/mingw_64/lib/libQt6Sql.a D$:/Qt/6.10.0/mingw_64/lib/libQt6Gui.a D$:/Qt/6.10.0/mingw_64/lib/libQt6Core.a D$:/Qt/6.10.0/mingw_64/lib/libQt6EntryPoint.a || BazyDanychJachtyApp_autogen BazyDanychJachtyApp_autogen_timestamp_deps
+build BazyDanychJachtyApp.exe: CXX_EXECUTABLE_LINKER__BazyDanychJachtyApp_Debug CMakeFiles/BazyDanychJachtyApp.dir/BazyDanychJachtyApp_autogen/mocs_compilation.cpp.obj CMakeFiles/BazyDanychJachtyApp.dir/main.cpp.obj CMakeFiles/BazyDanychJachtyApp.dir/mainwindow.cpp.obj CMakeFiles/BazyDanychJachtyApp.dir/databasemanager.cpp.obj CMakeFiles/BazyDanychJachtyApp.dir/login.cpp.obj | D$:/Qt/6.10.0/mingw_64/lib/libQt6Widgets.a D$:/Qt/6.10.0/mingw_64/lib/libQt6Sql.a D$:/Qt/6.10.0/mingw_64/lib/libQt6Gui.a D$:/Qt/6.10.0/mingw_64/lib/libQt6Core.a D$:/Qt/6.10.0/mingw_64/lib/libQt6EntryPoint.a || BazyDanychJachtyApp_autogen BazyDanychJachtyApp_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_FLAGS = -mwindows
   LINK_LIBRARIES = D:/Qt/6.10.0/mingw_64/lib/libQt6Widgets.a  D:/Qt/6.10.0/mingw_64/lib/libQt6Sql.a  D:/Qt/6.10.0/mingw_64/lib/libQt6Gui.a  -ld3d11  -ldxgi  -ldxguid  -ld3d12  D:/Qt/6.10.0/mingw_64/lib/libQt6Core.a  -lmpr  -luserenv  -lmingw32  D:/Qt/6.10.0/mingw_64/lib/libQt6EntryPoint.a  -lshell32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
@@ -176,7 +184,7 @@ build BazyDanychJachtyApp_autogen_timestamp_deps: phony
 #############################################
 # Utility command for BazyDanychJachtyApp_autogen
 
-build BazyDanychJachtyApp_autogen: phony CMakeFiles/BazyDanychJachtyApp_autogen BazyDanychJachtyApp_autogen/include/ui_mainwindow.h BazyDanychJachtyApp_autogen/timestamp BazyDanychJachtyApp_autogen/mocs_compilation.cpp BazyDanychJachtyApp_autogen_timestamp_deps
+build BazyDanychJachtyApp_autogen: phony CMakeFiles/BazyDanychJachtyApp_autogen BazyDanychJachtyApp_autogen/include/ui_mainwindow.h BazyDanychJachtyApp_autogen/include/ui_login.h BazyDanychJachtyApp_autogen/timestamp BazyDanychJachtyApp_autogen/mocs_compilation.cpp BazyDanychJachtyApp_autogen_timestamp_deps
 
 
 #############################################
@@ -193,7 +201,7 @@ build BazyDanychJachtyApp_autogen/timestamp BazyDanychJachtyApp_autogen/mocs_com
 #############################################
 # Phony custom command for CMakeFiles\BazyDanychJachtyApp_autogen
 
-build CMakeFiles/BazyDanychJachtyApp_autogen BazyDanychJachtyApp_autogen/include/ui_mainwindow.h | ${cmake_ninja_workdir}CMakeFiles/BazyDanychJachtyApp_autogen ${cmake_ninja_workdir}BazyDanychJachtyApp_autogen/include/ui_mainwindow.h: phony BazyDanychJachtyApp_autogen/timestamp || BazyDanychJachtyApp_autogen_timestamp_deps
+build CMakeFiles/BazyDanychJachtyApp_autogen BazyDanychJachtyApp_autogen/include/ui_mainwindow.h BazyDanychJachtyApp_autogen/include/ui_login.h | ${cmake_ninja_workdir}CMakeFiles/BazyDanychJachtyApp_autogen ${cmake_ninja_workdir}BazyDanychJachtyApp_autogen/include/ui_mainwindow.h ${cmake_ninja_workdir}BazyDanychJachtyApp_autogen/include/ui_login.h: phony BazyDanychJachtyApp_autogen/timestamp || BazyDanychJachtyApp_autogen_timestamp_deps
 
 # =============================================================================
 # Target aliases.

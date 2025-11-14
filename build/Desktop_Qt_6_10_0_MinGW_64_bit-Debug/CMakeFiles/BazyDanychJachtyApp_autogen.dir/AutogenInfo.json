@@ -389,6 +389,12 @@
 			null
 		],
 		[
+			"D:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/login.h",
+			"MU",
+			"EWIEGA46WW/moc_login.cpp",
+			null
+		],
+		[
 			"D:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
@@ -470,6 +476,11 @@
 	[
 		[
 			"D:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/databasemanager.cpp",
+			"MU",
+			null
+		],
+		[
+			"D:/Projects/QtProjects/BazyDanychJachtyApp/BazyDanychJachtyApp/login.cpp",
 			"MU",
 			null
 		],
