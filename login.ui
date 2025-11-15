@@ -41,7 +41,7 @@
         <item>
          <widget class="QLabel" name="LoginLoginLaber">
           <property name="text">
-           <string>Login</string>
+           <string>Nazwa użytkownika</string>
           </property>
          </widget>
         </item>
@@ -101,13 +101,13 @@
      <property name="title">
       <string>Zarejestruj się</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_9">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QVBoxLayout" name="RegLoginLayoutV">
         <item>
          <widget class="QLabel" name="RegLoginLabel">
           <property name="text">
-           <string>Login</string>
+           <string>Nazwa użytkownika</string>
           </property>
          </widget>
         </item>
@@ -127,6 +127,34 @@
         </item>
         <item>
          <widget class="QLineEdit" name="RegPassText"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="RegFirstNameLayoutV">
+        <item>
+         <widget class="QLabel" name="RegFirstNameLabel">
+          <property name="text">
+           <string>Imię</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="RegFirstNameText"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="RegLastNameLayoutV">
+        <item>
+         <widget class="QLabel" name="RegLastNameLabel">
+          <property name="text">
+           <string>Nazwisko</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="RegLastNameText"/>
         </item>
        </layout>
       </item>
@@ -179,7 +207,6 @@
   <tabstop>RegPassText</tabstop>
   <tabstop>RegEmailText</tabstop>
   <tabstop>RegNrText</tabstop>
-  <tabstop>lineEdit_7</tabstop>
  </tabstops>
  <resources/>
  <connections/>
