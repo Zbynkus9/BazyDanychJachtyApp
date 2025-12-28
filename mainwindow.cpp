@@ -24,7 +24,7 @@ void MainWindow::on_ConnectBTN_clicked()
     if (dbManager.connect()) {
         QMessageBox::information(this, "Connection", "Connected to MySQL successfully!");
         this->hide();
-        LoginScreen lgs;
+        LoginScreen lgs(nullptr,dbManager.db());
         lgs.setModal(true);
         lgs.exec();
 

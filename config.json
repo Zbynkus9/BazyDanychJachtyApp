@@ -3,5 +3,5 @@
   "port": 3306,
   "database": "jachtydb",
   "username": "root",
-  "password": "root"
+  "password": "rootadmin"
 }

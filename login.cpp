@@ -1,10 +1,12 @@
 #include "login.h"
 #include "ui_login.h"
+#include "mainappwindow.h"
 #include <QMessageBox>
 
-LoginScreen::LoginScreen(QWidget *parent)
+LoginScreen::LoginScreen(QWidget *parent, QSqlDatabase db)
     : QDialog(parent)
     , login_ui(new Ui::LoginScreen)
+    , m_db(db)
 {
     login_ui->setupUi(this);
 }
@@ -18,9 +20,11 @@ void LoginScreen::on_LoginBTN_clicked()
 {
     QString username = login_ui->LoginLoginText->text();
     QString password = login_ui->LoginPassText->text();
+    QString usernameFromDB = "";
+    QString passwordFromDB = "";
 
-   QSqlQuery query;
-    query.prepare("SELECT username, password FROM users_credentials where username = :username AND password = :password");
+    QSqlQuery query(m_db);
+    query.prepare("SELECT username, password, id_user FROM users where username = :username AND password = :password");
 
    query.bindValue(":username", username);
     query.bindValue(":password", password);
@@ -29,12 +33,23 @@ void LoginScreen::on_LoginBTN_clicked()
        QMessageBox::information(this, "Failed", "Querry Failed");
    }
    else {
-       QString usernameFromDB = query.value(0).toString();
-       QString passwordFromDB = query.value(1).toString();
+       if (query.next()) {
+           usernameFromDB = query.value(0).toString();
+           passwordFromDB = query.value(1).toString();
+       }
+       else {
+           QMessageBox::information(this, "Failed", "User not found");
+       }
 
        if (usernameFromDB == username && passwordFromDB == password) {
            QMessageBox::information(this, "Success", "Login succesful");
-       }
+           int userID = query.value(2).toInt();
+           loginSuccessful(userID);
+       //     this->hide();
+       //     MainAppWindow maw(nullptr, userID, m_db);
+       //     maw.setModal(true);
+       //     maw.exec();
+        }
        else {
            QMessageBox::information(this, "Failed", "Login Failed");
        }
