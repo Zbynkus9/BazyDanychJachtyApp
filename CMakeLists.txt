@@ -42,7 +42,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         databasemanager.h
         databasemanager.cpp
         login.h login.cpp login.ui
-        mainappwindow.h mainappwindow.cpp mainappwindow.ui
+
 
 
     )

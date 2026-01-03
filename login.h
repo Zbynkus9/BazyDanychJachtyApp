@@ -16,7 +16,8 @@ public:
     explicit LoginScreen(QWidget *parent = nullptr, QSqlDatabase db = QSqlDatabase());
     ~LoginScreen();
 
-public slots:
+signals:
+    // We don't write a body for this function, Qt does it automatically.
     void loginSuccessful(int userId);
 
 private slots:

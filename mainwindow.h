@@ -15,14 +15,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr, int userId = -1, QSqlDatabase db = QSqlDatabase());
     ~MainWindow();
 
 private slots:
-    void on_ConnectBTN_clicked();
 
 private:
     Ui::MainWindow *ui;
-    DatabaseManager dbManager;
+    int m_currentUserId;
+    QSqlDatabase m_db;
 };
 #endif // MAINWINDOW_H

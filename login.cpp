@@ -1,6 +1,5 @@
 #include "login.h"
 #include "ui_login.h"
-#include "mainappwindow.h"
 #include <QMessageBox>
 
 LoginScreen::LoginScreen(QWidget *parent, QSqlDatabase db)
@@ -20,40 +19,42 @@ void LoginScreen::on_LoginBTN_clicked()
 {
     QString username = login_ui->LoginLoginText->text();
     QString password = login_ui->LoginPassText->text();
-    QString usernameFromDB = "";
-    QString passwordFromDB = "";
+    if (username.length() == 0 || password.length() == 0) { QMessageBox::information(this, "Failed", "Enter username and/or password"); }
+    else {
+        QString usernameFromDB = "";
+        QString passwordFromDB = "";
 
-    QSqlQuery query(m_db);
-    query.prepare("SELECT username, password, id_user FROM users where username = :username AND password = :password");
+        QSqlQuery query(m_db);
+        query.prepare("SELECT username, password, id_user FROM users where username = :username AND password = :password");
 
-   query.bindValue(":username", username);
-    query.bindValue(":password", password);
+       query.bindValue(":username", username);
+        query.bindValue(":password", password);
 
-   if(!query.exec()) {
-       QMessageBox::information(this, "Failed", "Querry Failed");
-   }
-   else {
-       if (query.next()) {
-           usernameFromDB = query.value(0).toString();
-           passwordFromDB = query.value(1).toString();
+       if(!query.exec()) {
+           QMessageBox::information(this, "Failed", "Querry Failed");
        }
        else {
-           QMessageBox::information(this, "Failed", "User not found");
-       }
+           if (query.next()) {
+               usernameFromDB = query.value(0).toString();
+               passwordFromDB = query.value(1).toString();
+           }
+           else {
+               QMessageBox::information(this, "Failed", "User not found");
+           }
 
-       if (usernameFromDB == username && passwordFromDB == password) {
-           QMessageBox::information(this, "Success", "Login succesful");
-           int userID = query.value(2).toInt();
-           loginSuccessful(userID);
-       //     this->hide();
-       //     MainAppWindow maw(nullptr, userID, m_db);
-       //     maw.setModal(true);
-       //     maw.exec();
-        }
-       else {
-           QMessageBox::information(this, "Failed", "Login Failed");
-       }
+           if (usernameFromDB == username && passwordFromDB == password) {
+               QMessageBox::information(this, "Success", "Login succesful");
+               int userID = query.value(2).toInt();
+               emit loginSuccessful(userID);
 
+               // Close the login screen so main.cpp knows to move on
+               this->accept();
+            }
+           else {
+               QMessageBox::information(this, "Failed", "Login Failed");
+           }
+
+       }
    }
 }
 

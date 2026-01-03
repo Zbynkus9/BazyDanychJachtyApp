@@ -20,7 +20,7 @@ bool DatabaseManager::loadConfig(const QString& path) {
     databaseName = obj["database"].toString();
     username = obj["username"].toString();
     password = obj["password"].toString();
-
+    //password = "test";
     file.close();
     return true;
 }
