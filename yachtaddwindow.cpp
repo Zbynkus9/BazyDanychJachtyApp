@@ -1,9 +1,12 @@
 #include "yachtaddwindow.h"
 #include "ui_yachtaddwindow.h"
+#include <QMessageBox>
 
 YachtAddWindow::YachtAddWindow(QWidget *parent, int userId, QSqlDatabase db)
     : QDialog(parent)
     , ui(new Ui::YachtAddWindow)
+    , m_currentUserId(userId) // Save the ID
+    , m_db(db)                // Save the Connection
 {
     ui->setupUi(this);
 }
@@ -23,12 +26,49 @@ void YachtAddWindow::on_buttonBox_accepted()
     QString yClass = ui->ClassText->text();
 
 
+    m_db.transaction();
+
+    QSqlQuery qYacht(m_db);
+    qYacht.prepare("INSERT INTO yachts (name, class) VALUES (:yName, :yClass)");
+
+    qYacht.bindValue(":yName", yName);
+    qYacht.bindValue(":yClass", yClass);
+
+    if (!qYacht.exec()) {
+        m_db.rollback();
+        // Show Error
+        QMessageBox::information(this, "Failed", "Failed to add record to database");
+        return; // Exit function immediately
+    }
+
+
+    int newYachtId = qYacht.lastInsertId().toInt();
+
+    QSqlQuery qOwner(m_db);
+    qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, :uTime)");
+    qOwner.bindValue(":yId", newYachtId);
+    qOwner.bindValue(":oId", m_currentUserId);
+    qOwner.bindValue(":oFlag", "Current");
+    qOwner.bindValue(":uTime", QDateTime::currentDateTime());
+    // qOwner.bindValue(":uTime", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+
+    if (!qOwner.exec()) {
+        m_db.rollback();
+        // Show Error
+        QMessageBox::information(this, "Failed", "Failed to add record to database");
+        return;
+    }
+
+    m_db.commit();
+    QMessageBox::information(this, "Success", "Successfuly added Yacht and Ownership");
+    return;
+
 }
 
 
 void YachtAddWindow::on_buttonBox_rejected()
 {
     // just close and do nothing
-    YachtAddWindow::~YachtAddWindow();
+    return;
 }
 

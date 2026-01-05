@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent, int userId, QSqlDatabase db)
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
     qDebug() << QSqlDatabase::drivers();
+    qDebug() << QDateTime::currentDateTime();
 
     // UI is now ready.
     // Example: ui->labelUser->setText("User ID: " + QString::number(m_currentUserId));
