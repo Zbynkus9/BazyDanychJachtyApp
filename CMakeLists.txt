@@ -43,6 +43,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         databasemanager.cpp
         login.h login.cpp login.ui
         yachtaddwindow.h yachtaddwindow.cpp yachtaddwindow.ui
+        yachtownershipwindow.h yachtownershipwindow.cpp yachtownershipwindow.ui
+        tripaddwindow.h tripaddwindow.cpp tripaddwindow.ui
 
 
 
