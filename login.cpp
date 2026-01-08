@@ -58,3 +58,82 @@ void LoginScreen::on_LoginBTN_clicked()
    }
 }
 
+
+void LoginScreen::on_RegisterBTN_clicked()
+{
+    QString email = login_ui->RegEmailText->text();
+    if (email.length() == 0) { QMessageBox::information(this, "Failed", "Enter credentials"); }
+    else{
+        QSqlQuery mailCheck (m_db);
+
+        mailCheck.prepare("SELECT email FROM users WHERE email = :mail");
+        mailCheck.bindValue(":mail", email);
+
+        if(!mailCheck.exec()) {
+            QMessageBox::information(this, "Failed", "Querry Failed");
+            return;
+        }
+        else {
+            if (mailCheck.next()) {
+                // show that mail used
+                QMessageBox::information(this, "Failed", "Email already used");
+                return;
+            }
+        }
+
+        QString username = login_ui->RegLoginText->text();
+
+        if (username.length() == 0) { QMessageBox::information(this, "Failed", "Enter credentials"); }
+        else {
+            QSqlQuery nickCheck (m_db);
+
+            nickCheck.prepare("SELECT username FROM users WHERE username = :username");
+            nickCheck.bindValue(":username", username);
+
+            if(!nickCheck.exec()) {
+                QMessageBox::information(this, "Failed", "Querry Failed");
+                return;
+            }
+            else {
+                if (nickCheck.next()) {
+                    // show that username used
+                    QMessageBox::information(this, "Failed", "Username already used");
+                    return;
+                }
+            }
+        }
+
+        QString fname = login_ui->RegFirstNameText->text();
+        QString lname = login_ui->RegLastNameText->text();
+        QString password = login_ui->RegPassText->text();
+        QString phone = login_ui->RegNrText->text();
+
+        if (fname.length() == 0 || lname.length() == 0 || password.length() == 0) { QMessageBox::information(this, "Failed", "Enter credentials"); }
+        else {
+            //instert record into users
+            QSqlQuery registerUser (m_db);
+            if (phone.length() == 0){
+                registerUser.prepare("INSERT INTO users (first_name, last_name, email, username, password) VALUES (:fname, :lname, :mail, :username, :password)");
+            }
+            else {
+                registerUser.prepare("INSERT INTO users (first_name, last_name, email, phone_number, username, password) VALUES (:fname, :lname, :mail, :phone, :username, :password)");
+                registerUser.bindValue(":phone", phone);
+            }
+            registerUser.bindValue(":fname", fname);
+            registerUser.bindValue(":lname", lname);
+            registerUser.bindValue(":mail", email);
+            registerUser.bindValue(":username", username);
+            registerUser.bindValue(":password", password);
+
+            if(!registerUser.exec()) {
+                QMessageBox::information(this, "Failed", "Querry Failed");
+            }
+            else {
+                QMessageBox::information(this, "Success", "Register succesful");
+            }
+        }
+
+    }
+
+}
+

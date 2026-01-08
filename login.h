@@ -23,6 +23,8 @@ signals:
 private slots:
     void on_LoginBTN_clicked();
 
+    void on_RegisterBTN_clicked();
+
 private:
     Ui::LoginScreen *login_ui;
     QSqlDatabase m_db;
