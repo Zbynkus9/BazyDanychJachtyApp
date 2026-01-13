@@ -24,6 +24,14 @@ private slots:
 
     void on_YachtsOwnershipBTN_clicked();
 
+    void on_TripAddBTN_clicked();
+
+    void on_TripListOwnBTN_clicked();
+
+    void on_TripListSharedBTN_clicked();
+
+    void on_TripListPublicBTN_clicked();
+
 private:
     Ui::MainWindow *ui;
     int m_currentUserId;
