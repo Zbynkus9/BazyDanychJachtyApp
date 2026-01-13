@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "yachtaddwindow.h"
+#include "yachtownershipwindow.h"
 #include <QMessageBox>
 
 
@@ -26,4 +28,64 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+
+void MainWindow::on_YachtsBTN_clicked()
+{
+    // 1. Create the instance (Stack allocation)
+    // Pass 'this' as parent so it centers over the Main Window
+    YachtAddWindow dialog(this, m_currentUserId, m_db);
+
+    // 2. Launch it effectively "freezing" the code here until the dialog closes
+    int result = dialog.exec();
+
+    // 3. (Optional) Check what happened
+    if (result == QDialog::Accepted) {
+        // The user clicked "Save" and the transaction worked.
+        // Good place to refresh your TableView (which we will build next)!
+        qDebug() << "Yacht added!";
+    }
+}
+
+
+void MainWindow::on_YachtsOwnershipBTN_clicked()
+{
+    // 1. Create the instance (Stack allocation)
+    // Pass 'this' as parent so it centers over the Main Window
+    YachtOwnershipWindow dialog(this, m_currentUserId, m_db);
+
+    // 2. Launch it effectively "freezing" the code here until the dialog closes
+    int result = dialog.exec();
+
+    // 3. (Optional) Check what happened
+    if (result == QDialog::Accepted) {
+        // The user clicked "Save" and the transaction worked.
+        // Good place to refresh your TableView (which we will build next)!
+        qDebug() << "Yacht added!";
+    }
+}
+
+
+void MainWindow::on_TripAddBTN_clicked()
+{
+
+}
+
+
+void MainWindow::on_TripListOwnBTN_clicked()
+{
+
+}
+
+
+void MainWindow::on_TripListSharedBTN_clicked()
+{
+
+}
+
+
+void MainWindow::on_TripListPublicBTN_clicked()
+{
+
+}
 

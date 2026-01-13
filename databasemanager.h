@@ -11,6 +11,7 @@
 #include <QSqlError>
 #include <QDir>
 #include <QDateTime>
+#include <QSqlQueryModel>
 
 class DatabaseManager {
 public:

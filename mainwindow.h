@@ -20,6 +20,10 @@ public:
 
 private slots:
 
+    void on_YachtsBTN_clicked();
+
+    void on_YachtsOwnershipBTN_clicked();
+
 private:
     Ui::MainWindow *ui;
     int m_currentUserId;
