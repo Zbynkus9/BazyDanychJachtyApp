@@ -36,8 +36,33 @@ YachtOwnershipWindow::~YachtOwnershipWindow()
     delete ui;
 }
 
-void YachtOwnershipWindow::on_pushButton_clicked()
+void YachtOwnershipWindow::on_CloseBTN_clicked()
 {
     YachtOwnershipWindow::done(0);
+}
+
+
+void YachtOwnershipWindow::on_AddOwnerBTN_clicked()
+{
+    /*
+        Otwiera QDialog z wyborem jachtów których jesteśmy obecnym właścicielem oraz wpisaniem Username który jest sprawdzany czy istnieje i czy już nie jest obecnym właścicielem a następnie dodaje odpowiedni rekord właściciela
+    */
+}
+
+
+void YachtOwnershipWindow::on_DeleteOwnerBTN_clicked()
+{
+    /*
+        Otwiera QDialog z wyborem jachtów których jesteśmy obecnym właścicielem oraz z wyborem pasujących innych właścicieli wybranego jachtu (poza głóWnym właścicielem) i potwierdzeniem i anulacją usunięcia (aka zmiany na przeszłego właściciela)
+    */
+}
+
+
+void YachtOwnershipWindow::on_ChangeOwnerBTN_clicked()
+{
+    /*
+        Otwiera QDialog z wyborem jachtów których jesteśmy obecnym głównym właścicielem oraz wpisaniem Username który jest sprawdzany czy istnieje.
+        Po potwierdzeniu i poprawności Username, aktualizowani są wszyscy właściciele razem z głównym wybranego jachtu na przeszłych właścicieli i wpisany Username jest ustawiany jako główny właściciel
+    */
 }
 

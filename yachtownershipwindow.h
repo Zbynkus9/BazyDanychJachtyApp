@@ -17,7 +17,13 @@ public:
     ~YachtOwnershipWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_CloseBTN_clicked();
+
+    void on_AddOwnerBTN_clicked();
+
+    void on_DeleteOwnerBTN_clicked();
+
+    void on_ChangeOwnerBTN_clicked();
 
 private:
     Ui::YachtOwnershipWindow *ui;

@@ -24,6 +24,8 @@ void YachtAddWindow::on_buttonBox_accepted()
     // prepere and try to add ownership for that yacht for current user
     QString yName = ui->NameText->text();
     QString yClass = ui->ClassText->text();
+    // ---------------- Dodać więcej danych do zapisywania dla dodawanych jachtów -----------------
+    QString yDesc = ui->YachtDescText->toPlainText();
 
 
     m_db.transaction();
