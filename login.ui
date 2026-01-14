@@ -60,7 +60,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LoginPassText"/>
+         <widget class="QLineEdit" name="LoginPassText">
+          <property name="echoMode">
+           <enum>QLineEdit::EchoMode::Password</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -126,7 +130,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="RegPassText"/>
+         <widget class="QLineEdit" name="RegPassText">
+          <property name="echoMode">
+           <enum>QLineEdit::EchoMode::Password</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -182,7 +190,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="RegNrText"/>
+         <widget class="QLineEdit" name="RegNrText">
+          <property name="inputMethodHints">
+           <set>Qt::InputMethodHint::ImhDigitsOnly</set>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

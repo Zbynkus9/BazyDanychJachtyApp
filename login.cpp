@@ -1,6 +1,8 @@
 #include "login.h"
 #include "ui_login.h"
 #include <QMessageBox>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 LoginScreen::LoginScreen(QWidget *parent, QSqlDatabase db)
     : QDialog(parent)
@@ -8,6 +10,14 @@ LoginScreen::LoginScreen(QWidget *parent, QSqlDatabase db)
     , m_db(db)
 {
     login_ui->setupUi(this);
+
+    // Create a regex that allows digits (0-9) and repeats 1 to 9 times
+    QRegularExpression rx("^[0-9]{1,9}$");
+
+    // Create the validator
+    QValidator *validator = new QRegularExpressionValidator(rx, this);
+
+    login_ui->RegNrText->setValidator(validator);
 }
 
 LoginScreen::~LoginScreen()
