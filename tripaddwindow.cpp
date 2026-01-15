@@ -43,7 +43,11 @@ TripAddWindow::~TripAddWindow()
 void TripAddWindow::on_buttonBox_accepted()
 {
     /*
-     Sprawdzić czy wybrany jest folder i nie jest on pusty (oddzielnie żeby inne błedy pokazać)
+     Sprawdzić czy wybrany jest folder i nie jest on pusty (oddzielnie żeby inne błedy pokazać) (jeśli błąd jest to nie kontynuować dodawania ale też nie wywalać okna)
+     Pobrać który jacht jest wybrany
+     Pobrać jakie TripVisibility jest wybrane (jeśli private to olać TripDataVisibility)
+     Pobrać jakie TripDataVisibility są zaznaczone (aktualizowane na bierząco do listy????)
+     Pobrać dane z pól tekstowych (Title, Desc)
         Ogarnąć parsowanie JSON (wydobycie określonych danych [tutaj lat, lon, spd, w_spd, timestamp])
         For loop przez pliki w wybranym folderze i dla każdego !!!!!!(Zrobić to wszystko na tranzakcji żeby wyłapać jak się wykrzaczy i opcjonalnie poinformować na którym pliku się wywaliło)!!!!!!
             - parsowanie danych z JSON i zapisanie ich do zmiennych
