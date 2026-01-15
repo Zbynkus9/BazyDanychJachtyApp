@@ -144,7 +144,18 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="VisibilityComboBox"/>
+        <widget class="QComboBox" name="VisibilityComboBox">
+         <item>
+          <property name="text">
+           <string>Private</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Public</string>
+          </property>
+         </item>
+        </widget>
        </item>
       </layout>
      </item>

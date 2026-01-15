@@ -2,6 +2,8 @@
 #define TRIPADDWINDOW_H
 
 #include <QDialog>
+#include <QFileSystemModel>
+#include <QDir>
 #include "databasemanager.h"
 
 namespace Ui {
@@ -27,6 +29,8 @@ private:
     Ui::TripAddWindow *ui;
     int m_currentUserId;
     QSqlDatabase m_db;
+    QFileSystemModel *m_dirSensorData;
+    QString m_selectedDirectory;
 };
 
 #endif // TRIPADDWINDOW_H
