@@ -24,46 +24,49 @@ void YachtAddWindow::on_buttonBox_accepted()
     // prepere and try to add ownership for that yacht for current user
     QString yName = ui->NameText->text();
     QString yClass = ui->ClassText->text();
-    // ---------------- Dodać więcej danych do zapisywania dla dodawanych jachtów -----------------
-    QString yDesc = ui->YachtDescText->toPlainText();
+    if (yName.length() == 0 || yClass.length() == 0) { QMessageBox::information(this, "Failed", "Enter Yacht Data"); }
+    else {
+        // ---------------- Dodać więcej danych do zapisywania dla dodawanych jachtów -----------------
+        QString yDesc = ui->YachtDescText->toPlainText();
 
 
-    m_db.transaction();
+        m_db.transaction();
 
-    QSqlQuery qYacht(m_db);
-    qYacht.prepare("INSERT INTO yachts (name, class) VALUES (:yName, :yClass)");
+        QSqlQuery qYacht(m_db);
+        qYacht.prepare("INSERT INTO yachts (name, class) VALUES (:yName, :yClass)");
 
-    qYacht.bindValue(":yName", yName);
-    qYacht.bindValue(":yClass", yClass);
+        qYacht.bindValue(":yName", yName);
+        qYacht.bindValue(":yClass", yClass);
 
-    if (!qYacht.exec()) {
-        m_db.rollback();
-        // Show Error
-        QMessageBox::information(this, "Failed", "Failed to add record to database");
-        return; // Exit function immediately
-    }
+        if (!qYacht.exec()) {
+            m_db.rollback();
+            // Show Error
+            QMessageBox::information(this, "Failed", "Failed to add record to database");
+            return; // Exit function immediately
+        }
 
 
-    int newYachtId = qYacht.lastInsertId().toInt();
+        int newYachtId = qYacht.lastInsertId().toInt();
 
-    QSqlQuery qOwner(m_db);
-    qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, :uTime)");
-    qOwner.bindValue(":yId", newYachtId);
-    qOwner.bindValue(":oId", m_currentUserId);
-    qOwner.bindValue(":oFlag", "Current");
-    qOwner.bindValue(":uTime", QDateTime::currentDateTime());
-    // qOwner.bindValue(":uTime", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+        QSqlQuery qOwner(m_db);
+        qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, :uTime)");
+        qOwner.bindValue(":yId", newYachtId);
+        qOwner.bindValue(":oId", m_currentUserId);
+        qOwner.bindValue(":oFlag", "Current");
+        qOwner.bindValue(":uTime", QDateTime::currentDateTime());
+        // qOwner.bindValue(":uTime", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
 
-    if (!qOwner.exec()) {
-        m_db.rollback();
-        // Show Error
-        QMessageBox::information(this, "Failed", "Failed to add record to database");
+        if (!qOwner.exec()) {
+            m_db.rollback();
+            // Show Error
+            QMessageBox::information(this, "Failed", "Failed to add record to database");
+            return;
+        }
+
+        m_db.commit();
+        QMessageBox::information(this, "Success", "Successfuly added Yacht and Ownership");
         return;
     }
-
-    m_db.commit();
-    QMessageBox::information(this, "Success", "Successfuly added Yacht and Ownership");
-    return;
 
 }
 
