@@ -46,6 +46,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         yachtownershipwindow.h yachtownershipwindow.cpp yachtownershipwindow.ui
         tripaddwindow.h tripaddwindow.cpp tripaddwindow.ui
         tripviewwindow.h tripviewwindow.cpp tripviewwindow.ui
+        addcoownerwindow.h addcoownerwindow.cpp addcoownerwindow.ui
+        removecoownerwindow.h removecoownerwindow.cpp removecoownerwindow.ui
+        changeownerwindow.h changeownerwindow.cpp changeownerwindow.ui
+        selectyachtwindow.h selectyachtwindow.cpp selectyachtwindow.ui
 
 
 
