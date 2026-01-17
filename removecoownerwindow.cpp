@@ -13,6 +13,27 @@ RemoveCoOwnerWindow::RemoveCoOwnerWindow(QWidget *parent, int userId, int select
 
     // use passed yacht id to throught query get all CoOwners excluding self
     // add all of them as elements to combobox with their id attached
+    QSqlQuery query(m_db);
+    query.prepare("SELECT users.id_user, users.username FROM users JOIN yacht_ownership ON users.id_user = yacht_ownership.owner_id WHERE yacht_ownership.yacht_id = :yId AND yacht_ownership.ownership_flag = 'CoOwner' AND NOT EXISTS ( SELECT 1 FROM yacht_ownership history WHERE history.owner_id = users.id_user AND history.yacht_id = :yId AND history.ownership_flag = 'Past')");
+
+    query.bindValue(":yId", m_selectedYachtId); // The ID passed to this window
+
+    if (!query.exec()) {
+        // Handle error (qDebug or QMessageBox)
+        qCritical() << "SQL Error:" << query.lastError().text(); // Senior Dev Tip: Always log the error text!
+    }
+
+    while(query.next()) {
+        int uId = query.value("id_user").toInt();
+        QString uName = query.value("username").toString();
+
+        // Example: Add to a ComboBox
+        if (uId != m_currentUserId) {
+            ui->UserComboBox->addItem(uName, uId);
+        }
+    }
+
+
 
 }
 
@@ -24,6 +45,23 @@ RemoveCoOwnerWindow::~RemoveCoOwnerWindow()
 void RemoveCoOwnerWindow::on_buttonBox_accepted()
 {
     // update selected user to be Past owner form CoOwner
+    int selectedUser = ui->UserComboBox->itemData(ui->UserComboBox->currentIndex()).toInt();
+    QSqlQuery qOwner(m_db);
+    qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, :uTime)");
+    qOwner.bindValue(":yId", m_selectedYachtId);
+    qOwner.bindValue(":oId", selectedUser);
+    qOwner.bindValue(":oFlag", "Past");
+    qOwner.bindValue(":uTime", QDateTime::currentDateTime());
+
+    if (!qOwner.exec()) {
+        // Handle error (qDebug or QMessageBox)
+        qCritical() << "SQL Error:" << qOwner.lastError().text(); // Senior Dev Tip: Always log the error text!
+    }
+    else {
+        QMessageBox::information(this, "Success", "Selected user ownership removed");
+    }
+
+    return;
 }
 
 
