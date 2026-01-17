@@ -80,7 +80,7 @@ void LoginScreen::on_RegisterBTN_clicked()
         mailCheck.bindValue(":mail", email);
 
         if(!mailCheck.exec()) {
-            QMessageBox::information(this, "Failed", "Querry Failed");
+            QMessageBox::information(this, "Failed", "Mail Querry Failed");
             return;
         }
         else {
@@ -101,7 +101,7 @@ void LoginScreen::on_RegisterBTN_clicked()
             nickCheck.bindValue(":username", username);
 
             if(!nickCheck.exec()) {
-                QMessageBox::information(this, "Failed", "Querry Failed");
+                QMessageBox::information(this, "Failed", "Username Querry Failed");
                 return;
             }
             else {
@@ -136,7 +136,7 @@ void LoginScreen::on_RegisterBTN_clicked()
             registerUser.bindValue(":password", password);
 
             if(!registerUser.exec()) {
-                QMessageBox::information(this, "Failed", "Querry Failed");
+                QMessageBox::information(this, "Failed", "Register Querry Failed");
             }
             else {
                 QMessageBox::information(this, "Success", "Register succesful");
