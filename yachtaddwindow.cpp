@@ -49,12 +49,10 @@ void YachtAddWindow::on_buttonBox_accepted()
         int newYachtId = qYacht.lastInsertId().toInt();
 
         QSqlQuery qOwner(m_db);
-        qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, :uTime)");
+        qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, NOW())");
         qOwner.bindValue(":yId", newYachtId);
         qOwner.bindValue(":oId", m_currentUserId);
         qOwner.bindValue(":oFlag", "Current");
-        qOwner.bindValue(":uTime", QDateTime::currentDateTime());
-        // qOwner.bindValue(":uTime", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
 
         if (!qOwner.exec()) {
             m_db.rollback();
