@@ -53,7 +53,7 @@ void AddCoOwnerWindow::on_buttonBox_accepted()
                 // if found match check if it's not allready a Owner or CoOwner
                 uId = userCheck.value(0).toInt();
 
-                QSqlQuery ownershipCheck (m_db);
+                QSqlQuery ownershipCheck (m_db); // !!! -----------------   dodać case gdzie wybrana osoba jest Past Owner'em --------------- !!!
 
                 ownershipCheck.prepare("SELECT 1 FROM yacht_ownership WHERE yacht_id = :yId AND owner_id = :uId AND ownership_flag IN ('Current', 'CoOwner')");
                 ownershipCheck.bindValue(":yId", selectedYacht);

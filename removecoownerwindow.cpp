@@ -47,11 +47,9 @@ void RemoveCoOwnerWindow::on_buttonBox_accepted()
     // update selected user to be Past owner form CoOwner
     int selectedUser = ui->UserComboBox->itemData(ui->UserComboBox->currentIndex()).toInt();
     QSqlQuery qOwner(m_db);
-    qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, :uTime)");
+    qOwner.prepare("UPDATE yacht_ownership SET ownership_flag = 'Past', update_time = NOW() WHERE yacht_id = :yId AND owner_id = :oId;");
     qOwner.bindValue(":yId", m_selectedYachtId);
     qOwner.bindValue(":oId", selectedUser);
-    qOwner.bindValue(":oFlag", "Past");
-    qOwner.bindValue(":uTime", QDateTime::currentDateTime());
 
     if (!qOwner.exec()) {
         // Handle error (qDebug or QMessageBox)

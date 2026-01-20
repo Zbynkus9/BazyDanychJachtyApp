@@ -11,7 +11,7 @@ ChangeOwnerWindow::ChangeOwnerWindow(QWidget *parent, int userId, QSqlDatabase d
     ui->setupUi(this);
 
     QSqlQuery yachts(m_db);
-    yachts.prepare("SELECT yachts.id_yacht AS 'yId', yachts.name AS 'yName' FROM yachts JOIN yacht_ownership ON yachts.id_yacht = yacht_ownership.yacht_id WHERE owner_id = :currentUserId AND yacht_ownership.ownership_flag = 'Current' AND NOT EXISTS ( SELECT 1 FROM yacht_ownership history WHERE history.owner_id = users.id_user AND history.yacht_id = :yId AND history.ownership_flag = 'Past') ORDER BY yachts.name");
+    yachts.prepare("SELECT yachts.id_yacht AS 'yId', yachts.name AS 'yName' FROM yachts JOIN yacht_ownership ON yachts.id_yacht = yacht_ownership.yacht_id WHERE owner_id = :currentUserId AND yacht_ownership.ownership_flag = 'Current';");
     yachts.bindValue(":currentUserId", m_currentUserId);
 
     if (!yachts.exec()) {
@@ -53,7 +53,7 @@ void ChangeOwnerWindow::on_buttonBox_accepted()
                 // if found match check if it's not allready a Owner or CoOwner
                 uId = userCheck.value(0).toInt();
 
-                QSqlQuery ownershipCheck (m_db);
+                QSqlQuery ownershipCheck (m_db); // !!! -----------------   dodać case gdzie wybrana osoba jest Past Owner'em --------------- !!!
 
                 ownershipCheck.prepare("SELECT 1 FROM yacht_ownership WHERE yacht_id = :yId AND owner_id = :uId AND ownership_flag IN ('Current', 'CoOwner')");
                 ownershipCheck.bindValue(":yId", selectedYacht);
@@ -73,7 +73,7 @@ void ChangeOwnerWindow::on_buttonBox_accepted()
                         m_db.transaction();
                         // 1. change all current CoOwners and Owner to Past
                         QSqlQuery archiveQuery(m_db);
-                        archiveQuery.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) SELECT yacht_id, owner_id, 'Past', NOW() FROM yacht_ownership WHERE yacht_id = :yId AND ownership_flag IN ('Current', 'CoOwner')");
+                        archiveQuery.prepare("UPDATE yacht_ownership SET ownership_flag = 'Past', update_time = NOW() WHERE yacht_id = :yachtId AND ownership_flag IN ('Current', 'CoOwner');");
 
                         archiveQuery.bindValue(":yId", selectedYacht);
 
