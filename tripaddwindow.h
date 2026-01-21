@@ -31,6 +31,8 @@ private:
     QSqlDatabase m_db;
     QFileSystemModel *m_dirSensorData;
     QString m_selectedDirectory;
+    QString dirPath;
+    QString startPath;
 };
 
 #endif // TRIPADDWINDOW_H
