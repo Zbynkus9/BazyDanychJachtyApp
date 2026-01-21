@@ -50,6 +50,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         removecoownerwindow.h removecoownerwindow.cpp removecoownerwindow.ui
         changeownerwindow.h changeownerwindow.cpp changeownerwindow.ui
         selectyachtwindow.h selectyachtwindow.cpp selectyachtwindow.ui
+        theme.h theme.cpp
 
 
 

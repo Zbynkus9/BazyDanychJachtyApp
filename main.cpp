@@ -3,10 +3,14 @@
 #include "databasemanager.h"
 #include <QApplication>
 #include <QMessageBox>
+#include "theme.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    // Dark Mode
+    Theme::applyDarkPalette(a);
 
     // 1. Setup Database Manager
     DatabaseManager dbManager;

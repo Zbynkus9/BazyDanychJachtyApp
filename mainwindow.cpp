@@ -110,4 +110,3 @@ void MainWindow::on_TripListPublicBTN_clicked()
     // 2. Launch it effectively "freezing" the code here until the dialog closes
     dialog.exec();
 }
-
