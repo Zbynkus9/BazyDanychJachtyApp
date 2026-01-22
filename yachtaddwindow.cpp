@@ -24,7 +24,12 @@ void YachtAddWindow::on_buttonBox_accepted()
     // prepere and try to add ownership for that yacht for current user
     QString yName = ui->NameText->text();
     QString yClass = ui->ClassText->text();
-    if (yName.length() == 0 || yClass.length() == 0) { QMessageBox::information(this, "Failed", "Enter Yacht Data"); }
+    QString yLength = ui ->LengthText->text();
+    QString ySail_area = ui -> Sail_areaText->text();
+    QString yDraft_minimum = ui -> Draft_minimumText->text(); // zanurzenie bez miecza
+    QString yDraft_maximum = ui -> Draft_maximumText->text(); // zanurzenie z mieczem
+    if (yName.length() == 0 || yClass.length() == 0 || yLength.length() == 0 || ySail_area.length() == 0 || yDraft_minimum.length() == 0 || yDraft_maximum.length() == 0) { QMessageBox::information(this, "Failed", "Enter Yacht Data"); }
+
     else {
         // ---------------- Dodać więcej danych do zapisywania dla dodawanych jachtów -----------------
         QString yDesc = ui->YachtDescText->toPlainText();
@@ -33,10 +38,14 @@ void YachtAddWindow::on_buttonBox_accepted()
         m_db.transaction();
 
         QSqlQuery qYacht(m_db);
-        qYacht.prepare("INSERT INTO yachts (name, class) VALUES (:yName, :yClass)");
+        qYacht.prepare("INSERT INTO yachts (name, class, length, sail_area, draft_minimum, draft_maximum) VALUES (:yName, :yClass, :yLength, :ySail_area, :yDraft_minimum, yDraft_maximum)");
 
         qYacht.bindValue(":yName", yName);
         qYacht.bindValue(":yClass", yClass);
+        qYacht.bindValue(":yLength", yLength);
+        qYacht.bindValue(":ySail_area", ySail_area);
+        qYacht.bindValue(":yDraft_minimum", yDraft_minimum);
+        qYacht.bindValue("yDraft_maximum", yDraft_maximum);
 
         if (!qYacht.exec()) {
             m_db.rollback();
