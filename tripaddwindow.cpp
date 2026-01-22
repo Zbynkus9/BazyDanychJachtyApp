@@ -83,12 +83,17 @@ void TripAddWindow::on_buttonBox_accepted()
         QJsonObject obj = doc.object();
 
         // C. Extract "Simple" Data (Add error checking if keys exist!)
-        if (!obj.contains("speed")) double speed = -1;
-        else double speed = obj["speed"].toDouble();
-        if (!obj.contains("latitude")) double lat = -1;
-        else double lat = obj["latitude"].toDouble();
-        if (!obj.contains("longitude")) double lon = -1;
-        else double lon = obj["longitude"].toDouble();
+
+        double lon = -1;
+        double lat = -1;
+        double speed = -1;
+
+        if (!obj.contains("latitude")) lat = -1;
+        else lat = obj["latitude"].toDouble();
+        if (!obj.contains("longitude")) lon = -1;
+        else lon = obj["longitude"].toDouble();
+        if (!obj.contains("speed")) speed = -1;
+        else speed = obj["speed"].toDouble();
         // if (!obj.contains("wind")) double windSpeed = -1;
         // else double windSpeed = obj["wind"].toDouble(); // ------------ search what is name for obj for wind speed
         // if (!obj.contains("timestamp")) QDateTime timestamp = 0;
