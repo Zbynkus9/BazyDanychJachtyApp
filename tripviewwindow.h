@@ -21,6 +21,8 @@ private slots:
 
     void on_ShowDataBTN_clicked();
 
+    void on_ShowComplexDataBTN_clicked();
+
 private:
     Ui::TripViewWindow *ui;
     int m_currentUserId;
