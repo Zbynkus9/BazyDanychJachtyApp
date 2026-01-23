@@ -1,5 +1,7 @@
 #include "tripviewwindow.h"
 #include "ui_tripviewwindow.h"
+#include "tripdatawindow.h"
+#include <QMessageBox>
 
 TripViewWindow::TripViewWindow(QWidget *parent, int userId, QSqlDatabase db, int type)
     : QDialog(parent)
@@ -69,18 +71,43 @@ void TripViewWindow::on_ShowDataBTN_clicked()
 
     if (!select->hasSelection()) {
         // Warning: "Please select a trip first."
-        return;
+         QMessageBox::information(this, "Failed", "Please select a trip first.");
     }
+    else {
+        // 2. Get the specific ModelIndex of the ID column (Column 0) for the selected row
+        QModelIndex index = select->selectedRows(0).at(0); // 0 = Column Index for id_trip
 
-    // 2. Get the specific ModelIndex of the ID column (Column 0) for the selected row
-    QModelIndex index = select->selectedRows(0).at(0); // 0 = Column Index for id_trip
+        // 3. Extract the data
+        int tripId = index.data().toInt();
 
-    // 3. Extract the data
-    int tripId = index.data().toInt();
+        // 4. Open the Data Dialog ---------- dodać QDialog Widget -------------
+        TripDataWindow *window = new TripDataWindow(this, tripId, m_db, 0);
+        window->setAttribute(Qt::WA_DeleteOnClose);
+        window->show();
+    }
+}
 
-    // 4. Open the Data Dialog ---------- dodać QDialog Widget -------------
-    // TripDataWindow *window = new TripDataWindow(this, tripId, m_db);
-    // window->setAttribute(Qt::WA_DeleteOnClose);
-    // window->show();
+
+void TripViewWindow::on_ShowComplexDataBTN_clicked()
+{
+    // 1. Get the list of selected rows
+    QItemSelectionModel *select = ui->tableView->selectionModel();
+
+    if (!select->hasSelection()) {
+        // Warning: "Please select a trip first."
+        QMessageBox::information(this, "Failed", "Please select a trip first.");
+    }
+    else {
+        // 2. Get the specific ModelIndex of the ID column (Column 0) for the selected row
+        QModelIndex index = select->selectedRows(0).at(0); // 0 = Column Index for id_trip
+
+        // 3. Extract the data
+        int tripId = index.data().toInt();
+
+        // 4. Open the Data Dialog ---------- dodać QDialog Widget -------------
+        TripDataWindow *window = new TripDataWindow(this, tripId, m_db, 1);
+        window->setAttribute(Qt::WA_DeleteOnClose);
+        window->show();
+    }
 }
 

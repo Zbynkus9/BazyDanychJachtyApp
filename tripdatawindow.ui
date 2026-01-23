@@ -32,7 +32,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="TripNameTxt">
          <property name="text">
           <string>Trip Data</string>
          </property>
