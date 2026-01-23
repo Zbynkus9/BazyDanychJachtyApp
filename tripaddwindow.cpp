@@ -47,7 +47,34 @@ TripAddWindow::~TripAddWindow()
 void TripAddWindow::on_buttonBox_accepted()
 {
     int selectedYacht = ui->YachtComboBOx->itemData(ui->YachtComboBOx->currentIndex()).toInt();
+    QString tripVisibility = ui->VisibilityComboBox->itemData(ui->VisibilityComboBox->currentIndex()).toString();
+    QString tName = ui->TripNameText->text();
+    QString tDesc = ui->TripDescriptionText->toPlainText();
+
+    // Sprawdzić czy nie są puste pola
+    if (tName.length() == 0 || tDesc.length() == 0) {
+        QMessageBox::information(this, "Failed", "Enter trip informations");
+        return;
+    }
+
     // zrobić dodanie rejsu wpierw
+    m_db.transaction();
+    QSqlQuery trip(m_db);
+    trip.prepare("INSERT INTO sailing_trips (user_id, yacht_id, trip_name, trip_description, start_datetime, end_datetime, trip_data_visibility, visibility) VALUES (:uId, :yId, :tName, :tDesc, NOW(), NOW(), :tDataVis, :tVis);");
+    trip.bindValue(":uId", m_currentUserId);
+    trip.bindValue(":yId", selectedYacht);
+    trip.bindValue(":tName", tName);
+    trip.bindValue(":tDesc", tDesc);
+    trip.bindValue(":tDataVis", "Username"); // temporary
+    trip.bindValue(":tVis", tripVisibility);
+
+    if (!trip.exec()) {
+        m_db.rollback(); // Undo the Simple insert too!
+        qCritical() << "SQL Error:" << trip.lastError().text();
+        return;
+    }
+
+    int tId = trip.lastInsertId().toInt();
 
 
     /*
@@ -70,7 +97,7 @@ void TripAddWindow::on_buttonBox_accepted()
 
 
     // OPTIONAL: Start a "Global" Transaction here if you want "All or Nothing"
-    m_db.transaction();
+
 
     foreach (QFileInfo fileInfo, fileList) {
         // A. Read File
@@ -108,7 +135,7 @@ void TripAddWindow::on_buttonBox_accepted()
         QSqlQuery qSimple(m_db);
         qSimple.prepare("INSERT INTO simple_sensors_records (trip_id, timestamp, longitude, latitude, speed, wind_speed) VALUES (:tId, :tStmp, :lon, :lat, :spd, :wSpd)");
 
-        //qSimple.bindValue(":tId", tId);
+        qSimple.bindValue(":tId", tId);
         // qSimple.bindValue(":tStmp", timestamp);
         qSimple.bindValue(":lon", lon);
         qSimple.bindValue(":lat", lat);
@@ -117,6 +144,7 @@ void TripAddWindow::on_buttonBox_accepted()
 
         if (!qSimple.exec()) {
             m_db.rollback();
+            qCritical() << "SQL Error:" << qSimple.lastError().text();
             return;
         }
 
