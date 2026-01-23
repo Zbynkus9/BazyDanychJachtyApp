@@ -11,7 +11,7 @@ AddCoOwnerWindow::AddCoOwnerWindow(QWidget *parent, int userId, QSqlDatabase db)
     ui->setupUi(this);
 
     QSqlQuery yachts(m_db);
-    yachts.prepare("SELECT yachts.id_yacht AS 'yId', yachts.name AS 'yName' FROM yachts JOIN yacht_ownership ON yachts.id_yacht = yacht_ownership.yacht_id WHERE owner_id = :currentUserId AND NOT EXISTS ( SELECT 1 FROM yacht_ownership history WHERE history.owner_id = users.id_user AND history.yacht_id = :yId AND history.ownership_flag = 'Past') ORDER BY yachts.name");
+    yachts.prepare("SELECT yachts.id_yacht AS 'yId', yachts.name AS 'yName' FROM yachts JOIN yacht_ownership ON yachts.id_yacht = yacht_ownership.yacht_id WHERE owner_id = :currentUserId AND yacht_ownership.ownership_flag IN ('Current', 'CoOwner') ORDER BY yachts.name");
     yachts.bindValue(":currentUserId", m_currentUserId);
 
     if (!yachts.exec()) {
