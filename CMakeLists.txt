@@ -52,6 +52,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         selectyachtwindow.h selectyachtwindow.cpp selectyachtwindow.ui
         theme.h theme.cpp
         tripdatawindow.h tripdatawindow.cpp tripdatawindow.ui
+        signalkimporter.h signalkimporter.cpp
 
 
 

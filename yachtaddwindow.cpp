@@ -38,20 +38,26 @@ void YachtAddWindow::on_buttonBox_accepted()
         m_db.transaction();
 
         QSqlQuery qYacht(m_db);
-        qYacht.prepare("INSERT INTO yachts (name, class, length, sail_area, draft_minimum, draft_maximum) VALUES (:yName, :yClass, :yLength, :ySail_area, :yDraft_minimum, yDraft_maximum)");
+        qYacht.prepare("INSERT INTO yachts (name, class, length, sail_area, draft_minimum, draft_maximum) VALUES (:yName, :yClass, :yLength, :ySail_area, :yDraft_minimum, :yDraft_maximum)");
 
         qYacht.bindValue(":yName", yName);
         qYacht.bindValue(":yClass", yClass);
         qYacht.bindValue(":yLength", yLength);
         qYacht.bindValue(":ySail_area", ySail_area);
         qYacht.bindValue(":yDraft_minimum", yDraft_minimum);
-        qYacht.bindValue("yDraft_maximum", yDraft_maximum);
+        qYacht.bindValue(":yDraft_maximum", yDraft_maximum);
 
         if (!qYacht.exec()) {
             m_db.rollback();
-            // Show Error
-            QMessageBox::information(this, "Failed", "Failed to add record to database");
-            return; // Exit function immediately
+
+            QString errorText =
+                "Failed to add yacht:\n\n" +
+                qYacht.lastError().text();
+
+            qDebug() << errorText;
+
+            QMessageBox::critical(this, "Database Error", errorText);
+            return;
         }
 
 

@@ -71,6 +71,7 @@ void LoginScreen::on_LoginBTN_clicked()
 
 void LoginScreen::on_RegisterBTN_clicked()
 {
+
     QString email = login_ui->RegEmailText->text();
     if (email.length() == 0) { QMessageBox::information(this, "Failed", "Enter credentials"); }
     else{
@@ -80,7 +81,11 @@ void LoginScreen::on_RegisterBTN_clicked()
         mailCheck.bindValue(":mail", email);
 
         if(!mailCheck.exec()) {
-            QMessageBox::information(this, "Failed", "Mail Querry Failed");
+            QMessageBox::critical(
+                this,
+                "SQL Error",
+                mailCheck.lastError().text()
+                );
             return;
         }
         else {
@@ -146,4 +151,3 @@ void LoginScreen::on_RegisterBTN_clicked()
     }
 
 }
-
