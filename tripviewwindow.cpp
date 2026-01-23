@@ -33,8 +33,6 @@ TripViewWindow::TripViewWindow(QWidget *parent, int userId, QSqlDatabase db, int
     }
 
 
-
-
     query.bindValue(":uId", m_currentUserId);
 
     if (!query.exec()) {
