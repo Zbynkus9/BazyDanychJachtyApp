@@ -19,6 +19,8 @@ public:
 private slots:
     void on_pushButton_2_clicked();
 
+    void on_ShowDataBTN_clicked();
+
 private:
     Ui::TripViewWindow *ui;
     int m_currentUserId;
