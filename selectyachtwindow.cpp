@@ -40,7 +40,10 @@ void SelectYachtWindow::on_buttonBox_accepted()
     RemoveCoOwnerWindow dialog(this, m_currentUserId, selectedYacht, m_db);
 
     // 2. Launch it effectively "freezing" the code here until the dialog closes
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        // Skoro małe okno dało OK, to ja (pośrednik) też daję OK i się zamykam
+        this->accept();
+    }
 }
 
 

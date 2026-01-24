@@ -57,6 +57,7 @@ void RemoveCoOwnerWindow::on_buttonBox_accepted()
     }
     else {
         QMessageBox::information(this, "Success", "Selected user ownership removed");
+        this->accept();
     }
 
     return;

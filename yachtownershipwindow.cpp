@@ -4,16 +4,7 @@
 #include "selectyachtwindow.h"
 #include "ui_yachtownershipwindow.h"
 
-YachtOwnershipWindow::YachtOwnershipWindow(QWidget *parent, int userId, QSqlDatabase db)
-    : QDialog(parent)
-    , ui(new Ui::YachtOwnershipWindow)
-    , m_currentUserId(userId) // Save the ID
-    , m_db(db)                // Save the Connection
-{
-    ui->setupUi(this);
-    // 1. Create the model (Heap allocation, pass 'this' as parent so it auto-deletes)
-    QSqlQueryModel *model = new QSqlQueryModel(this);
-
+void YachtOwnershipWindow::refreshTable() { // Dodaj deklarację
     // 2. Prepare the complex query
     QSqlQuery query(m_db);
     query.prepare("SELECT yachts.name AS 'Yacht Name', users.username, yacht_ownership.ownership_flag, yacht_ownership.update_time FROM yacht_ownership JOIN yachts ON yacht_ownership.yacht_id = yachts.id_yacht JOIN users ON yacht_ownership.owner_id = users.id_user WHERE yacht_ownership.yacht_id IN ( SELECT yacht_id FROM yacht_ownership WHERE owner_id = :currentUserId ) ORDER BY yachts.name");
@@ -32,6 +23,20 @@ YachtOwnershipWindow::YachtOwnershipWindow(QWidget *parent, int userId, QSqlData
 
     // Optional: Adjust column widths to look nice
     ui->tableView->resizeColumnsToContents();
+}
+
+YachtOwnershipWindow::YachtOwnershipWindow(QWidget *parent, int userId, QSqlDatabase db)
+    : QDialog(parent)
+    , ui(new Ui::YachtOwnershipWindow)
+    , m_currentUserId(userId) // Save the ID
+    , m_db(db)                // Save the Connection
+{
+    ui->setupUi(this);
+    // 1. Create the model (Heap allocation, pass 'this' as parent so it auto-deletes)
+    model = new QSqlQueryModel(this);
+
+    refreshTable();
+
 }
 
 YachtOwnershipWindow::~YachtOwnershipWindow()
@@ -55,7 +60,9 @@ void YachtOwnershipWindow::on_AddOwnerBTN_clicked()
     AddCoOwnerWindow dialog(this, m_currentUserId, m_db);
 
     // 2. Launch it effectively "freezing" the code here until the dialog closes
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        refreshTable();
+    }
 }
 
 
@@ -69,7 +76,9 @@ void YachtOwnershipWindow::on_DeleteOwnerBTN_clicked()
     SelectYachtWindow dialog(this, m_currentUserId, m_db);
 
     // 2. Launch it effectively "freezing" the code here until the dialog closes
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        refreshTable();
+    }
 }
 
 
@@ -84,5 +93,7 @@ void YachtOwnershipWindow::on_ChangeOwnerBTN_clicked()
     ChangeOwnerWindow dialog(this, m_currentUserId, m_db);
 
     // 2. Launch it effectively "freezing" the code here until the dialog closes
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted) {
+        refreshTable();
+    }
 }
