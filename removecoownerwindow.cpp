@@ -14,7 +14,7 @@ RemoveCoOwnerWindow::RemoveCoOwnerWindow(QWidget *parent, int userId, int select
     // use passed yacht id to throught query get all CoOwners excluding self
     // add all of them as elements to combobox with their id attached
     QSqlQuery query(m_db);
-    query.prepare("SELECT users.id_user, users.username FROM users JOIN yacht_ownership ON users.id_user = yacht_ownership.owner_id WHERE yacht_ownership.yacht_id = :yId AND yacht_ownership.ownership_flag = 'CoOwner' AND NOT EXISTS ( SELECT 1 FROM yacht_ownership history WHERE history.owner_id = users.id_user AND history.yacht_id = :yId AND history.ownership_flag = 'Past')");
+    query.prepare("SELECT users.id_user, users.username FROM users JOIN yacht_ownership ON users.id_user = yacht_ownership.owner_id WHERE yacht_ownership.yacht_id = :yId AND yacht_ownership.ownership_flag = 'CoOwner'");
 
     query.bindValue(":yId", m_selectedYachtId); // The ID passed to this window
 

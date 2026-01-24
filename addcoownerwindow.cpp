@@ -34,65 +34,91 @@ AddCoOwnerWindow::~AddCoOwnerWindow()
 void AddCoOwnerWindow::on_buttonBox_accepted()
 {
     QString user = ui->UsernameText->text();
+    // Pobieramy ID jachtu (zakładam, że jest przechowywane jako UserRole w ComboBox)
     int selectedYacht = ui->YachtComboBox->itemData(ui->YachtComboBox->currentIndex()).toInt();
     int uId = -1;
-    if (user.length() == 0) { QMessageBox::information(this, "Failed", "Enter username"); }
-    else {
-        // Check if user exists "SELECT id_user, username FROM users"
-        QSqlQuery userCheck (m_db);
 
-        userCheck.prepare("SELECT id_user, username FROM users WHERE username = :username");
-        userCheck.bindValue(":username", user);
+    if (user.length() == 0) {
+        QMessageBox::information(this, "Failed", "Enter username");
+        return;
+    }
 
-        if(!userCheck.exec()) {
-            QMessageBox::information(this, "Failed", "Username Querry Failed");
+    // 1. Sprawdź czy użytkownik istnieje
+    QSqlQuery userCheck(m_db);
+    userCheck.prepare("SELECT id_user FROM users WHERE username = :username");
+    userCheck.bindValue(":username", user);
+
+    if (!userCheck.exec()) {
+        QMessageBox::critical(this, "Database Error", "User Check Query Failed: " + userCheck.lastError().text());
+        return;
+    }
+
+    if (userCheck.next()) {
+        uId = userCheck.value(0).toInt();
+
+        // 2. Sprawdź czy jest już AKTYWNYM właścicielem (Current lub CoOwner)
+        QSqlQuery activeOwnerCheck(m_db);
+        activeOwnerCheck.prepare("SELECT 1 FROM yacht_ownership WHERE func_is_active_owner(:uId, :yId) = 1");
+        activeOwnerCheck.bindValue(":yId", selectedYacht);
+        activeOwnerCheck.bindValue(":uId", uId);
+
+        if (!activeOwnerCheck.exec()) {
+            QMessageBox::critical(this, "Database Error", "Active Owner Check Failed");
+            return;
+        }
+
+        if (activeOwnerCheck.next()) {
+            // Użytkownik JUŻ JEST właścicielem
+            QMessageBox::warning(this, "Error", "User is already an owner or co-owner of this yacht.");
             return;
         }
         else {
-            if (userCheck.next()) {
-                // if found match check if it's not allready a Owner or CoOwner
-                uId = userCheck.value(0).toInt();
+            // Użytkownik NIE JEST aktywnym właścicielem.
+            // 3. Sprawdź czy był PRZESZŁYM właścicielem (Past)
+            QSqlQuery pastOwnerCheck(m_db);
+            pastOwnerCheck.prepare("SELECT id_ownership FROM yacht_ownership "
+                                   "WHERE yacht_id = :yId AND owner_id = :uId AND ownership_flag = 'Past'");
+            pastOwnerCheck.bindValue(":yId", selectedYacht);
+            pastOwnerCheck.bindValue(":uId", uId);
 
-                QSqlQuery ownershipCheck (m_db); // !!! -----------------   dodać case gdzie wybrana osoba jest Past Owner'em --------------- !!!
+            if (!pastOwnerCheck.exec()) {
+                QMessageBox::critical(this, "Database Error", "Past Owner Check Failed");
+                return;
+            }
 
-                ownershipCheck.prepare("SELECT 1 FROM yacht_ownership WHERE yacht_id = :yId AND owner_id = :uId AND ownership_flag IN ('Current', 'CoOwner')");
-                ownershipCheck.bindValue(":yId", selectedYacht);
-                ownershipCheck.bindValue(":uId", uId);
+            if (pastOwnerCheck.next()) {
+                // SCENARIUSZ A: Znaleziono rekord 'Past' -> AKTUALIZACJA (Przywrócenie)
+                int recordId = pastOwnerCheck.value(0).toInt();
 
-                if(!ownershipCheck.exec()) {
-                    QMessageBox::information(this, "Failed", "Username Querry Failed");
+                QSqlQuery updateQuery(m_db);
+                updateQuery.prepare("UPDATE yacht_ownership "
+                                    "SET ownership_flag = 'CoOwner', update_time = NOW() "
+                                    "WHERE id_ownership = :id");
+                updateQuery.bindValue(":id", recordId);
+
+                if (!updateQuery.exec()) {
+                    QMessageBox::critical(this, "Failed", "Failed to restore past owner: " + updateQuery.lastError().text());
                     return;
                 }
-                else {
-                    if (ownershipCheck.next()) {
-                        QMessageBox::warning(this, "Error", "User is already an owner or co-owner of this yacht.");
-                        return; // Stop execution
-                    }
-                    else {
-                        QSqlQuery qOwner(m_db);
-                        qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, NOW())");
-                        qOwner.bindValue(":yId", selectedYacht);
-                        qOwner.bindValue(":oId", uId);
-                        qOwner.bindValue(":oFlag", "CoOwner");
-
-                        if (!qOwner.exec()) {
-                            // Show Error
-                            QMessageBox::information(this, "Failed", "Failed to add record to database");
-                            return;
-                        }
-
-                        QMessageBox::information(this, "Success", "Successfuly added CoOwner");
-                        return;
-                    }
-                }
-
-                return;
+                QMessageBox::information(this, "Success", "User restored from Past Owner to CoOwner.");
             }
             else {
-                QMessageBox::information(this, "Failed", "User don't exitst");
-                return;
+                // SCENARIUSZ B: Brak historii -> NOWY WPIS (Insert)
+                QSqlQuery insertQuery(m_db);
+                insertQuery.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) "
+                                    "VALUES (:yId, :oId, 'CoOwner', NOW())");
+                insertQuery.bindValue(":yId", selectedYacht);
+                insertQuery.bindValue(":oId", uId);
+
+                if (!insertQuery.exec()) {
+                    QMessageBox::critical(this, "Failed", "Failed to add record: " + insertQuery.lastError().text());
+                    return;
+                }
+                QMessageBox::information(this, "Success", "Successfully added new CoOwner.");
             }
         }
+    } else {
+        QMessageBox::warning(this, "Failed", "User does not exist");
     }
 }
 

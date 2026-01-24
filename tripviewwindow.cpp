@@ -20,15 +20,45 @@ TripViewWindow::TripViewWindow(QWidget *parent, int userId, QSqlDatabase db, int
     switch (view_type) {
     // 0 - widok tylko swoich rejsów (trips.user_id == m_currentUserId)
     case 0:
-        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.trip_name AS 'Trip title', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht WHERE sailing_trips.user_id = :uId ORDER BY sailing_trips.start_datetime DESC");
+        query.prepare("SELECT "
+                  "id_trip, "           // Kolumna 0: Potrzebna dla logiki (ukryjemy ją)
+                  "`Nazwa Rejsu`, "     // Kolumna 1
+                  "Jacht, "             // Kolumna 2
+                  "Start, "             // Kolumna 3
+                  "Status, "            // Kolumna 4
+                  "`Minuty_Trwania`, "  // Kolumna 5
+                  "`Liczba_Próbek` "    // Kolumna 6
+                  "FROM view_trip_dashboard "
+                  "WHERE id_kapitana = :uid "  // Filtrujemy tylko moje rejsy
+                  "ORDER BY Start DESC");
         break;
     // 1 - widok swoich rejsów + rejsów z przypisanym jachtem
     case 1:
-        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.trip_name AS 'Trip title',  users.username AS 'Captain', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN users ON sailing_trips.user_id = users.id_user JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht JOIN yacht_ownership ON sailing_trips.yacht_id = yacht_ownership.yacht_id WHERE yacht_ownership.owner_id = :uId AND yacht_ownership.ownership_flag IN ('Current', 'CoOwner') ORDER BY sailing_trips.start_datetime DESC");
+        query.prepare("SELECT "
+                      "id_trip, "           // W widoku kolumny są unikalne, nie musisz pisać nazwy tabeli
+                      "`Nazwa Rejsu`, "
+                      "Jacht, "
+                      "Kapitan, "
+                      "Start, "
+                      "Status, "
+                      "`Liczba_Próbek` "
+                      "FROM view_trip_dashboard "
+                      "WHERE func_is_active_owner(:uId, id_jachtu) = 1 "
+                      "ORDER BY Start DESC");
         break;
     // 2 - widok tylko rejsów udostępnionych przez innych (sailing_trips.visibility == Public)
     case 2:
-        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.trip_name AS 'Trip title',  users.username AS 'Captain', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN users ON sailing_trips.user_id = users.id_user JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht WHERE sailing_trips.user_id != :uId AND sailing_trips.visibility = 'Public' ORDER BY sailing_trips.start_datetime DESC");
+        query.prepare("SELECT "
+                      "id_trip, "           // Kolumna 0 (ukryta)
+                      "`Nazwa Rejsu`, "
+                      "Jacht, "
+                      "Kapitan, "           // Tutaj warto widzieć kto płynął Twoim jachtem
+                      "Start, "
+                      "Status, "
+                      "`Liczba_Próbek` "
+                      "FROM view_trip_dashboard "
+                      "WHERE visibility = 'Public' "
+                      "ORDER BY Start DESC");
         break;
     default:
         break;
@@ -41,6 +71,11 @@ TripViewWindow::TripViewWindow(QWidget *parent, int userId, QSqlDatabase db, int
         // Handle error (qDebug or QMessageBox)
         qCritical() << "SQL Error:" << query.lastError().text(); // Senior Dev Tip: Always log the error text!
     }
+
+    // Konfiguracja tabeli (żeby klikało się przyjemnie)
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows); // Zaznaczaj całe wiersze
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // Tylko jeden rejs na raz
+    ui->tableView->setAlternatingRowColors(true); // Paski dla czytelności
 
     // 3. Load the model
     model->setQuery(std::move(query));

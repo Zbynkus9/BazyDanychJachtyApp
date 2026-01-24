@@ -50,60 +50,21 @@ void ChangeOwnerWindow::on_buttonBox_accepted()
         }
         else {
             if (userCheck.next()) {
-                // if found match check if it's not allready a Owner or CoOwner
                 uId = userCheck.value(0).toInt();
 
-                QSqlQuery ownershipCheck (m_db); // !!! -----------------   dodać case gdzie wybrana osoba jest Past Owner'em --------------- !!!
+                    QSqlQuery query(m_db);
+                    query.prepare("CALL proc_transfer_ownership(:yId, :oId)");
+                    query.bindValue(":yId", selectedYacht);
+                    query.bindValue(":oId", uId);
 
-                ownershipCheck.prepare("SELECT 1 FROM yacht_ownership WHERE yacht_id = :yId AND owner_id = :uId AND ownership_flag IN ('Current', 'CoOwner')");
-                ownershipCheck.bindValue(":yId", selectedYacht);
-                ownershipCheck.bindValue(":uId", uId);
+                    if (!query.exec()) {
+                        // Show Error
+                        QMessageBox::information(this, "Failed", "Failed to transfer ownership");
+                        return;
+                    }
 
-                if(!ownershipCheck.exec()) {
-                    QMessageBox::information(this, "Failed", "Username Querry Failed");
+                    QMessageBox::information(this, "Success", "Successfuly transfered Ownership");
                     return;
-                }
-                else {
-                    if (ownershipCheck.next()) {
-                        QMessageBox::warning(this, "Error", "User is already an owner or co-owner of this yacht.");
-                        return; // Stop execution
-                    }
-                    else {
-                        // ----------------------------- create transaction -----------------------------------
-                        m_db.transaction();
-                        // 1. change all current CoOwners and Owner to Past
-                        QSqlQuery archiveQuery(m_db);
-                        archiveQuery.prepare("UPDATE yacht_ownership SET ownership_flag = 'Past', update_time = NOW() WHERE yacht_id = :yachtId AND ownership_flag IN ('Current', 'CoOwner');");
-
-                        archiveQuery.bindValue(":yId", selectedYacht);
-
-                        if (!archiveQuery.exec()) {
-                            m_db.rollback(); // If you are inside a transaction
-                            qCritical() << "Failed to archive owners:" << archiveQuery.lastError().text();
-                            return;
-                        }
-                        else {
-                            QSqlQuery qOwner(m_db);
-                            qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, NOW())");
-                            qOwner.bindValue(":yId", selectedYacht);
-                            qOwner.bindValue(":oId", uId);
-                            qOwner.bindValue(":oFlag", "Current");
-
-                            if (!qOwner.exec()) {
-                                // Show Error
-                                m_db.rollback(); // If you are inside a transaction
-                                QMessageBox::information(this, "Failed", "Failed to transfer ownership");
-                                return;
-                            }
-
-                            m_db.commit();
-                            QMessageBox::information(this, "Success", "Successfuly transfered Ownership");
-                            return;
-                        }
-                    }
-                }
-
-                return;
             }
             else {
                 QMessageBox::information(this, "Failed", "User don't exitst");

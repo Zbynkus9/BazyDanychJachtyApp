@@ -160,18 +160,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,5">
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Widoczność danych</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="DataVisibilityComboBox"/>
-       </item>
-      </layout>
+      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch=""/>
      </item>
     </layout>
    </item>
