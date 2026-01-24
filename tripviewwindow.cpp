@@ -20,15 +20,15 @@ TripViewWindow::TripViewWindow(QWidget *parent, int userId, QSqlDatabase db, int
     switch (view_type) {
     // 0 - widok tylko swoich rejsów (trips.user_id == m_currentUserId)
     case 0:
-        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.name AS 'Trip title', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht WHERE sailing_trip.user_id = :uId ORDER BY sailing_trips.start_datetime DESC");
+        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.trip_name AS 'Trip title', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht WHERE sailing_trips.user_id = :uId ORDER BY sailing_trips.start_datetime DESC");
         break;
     // 1 - widok swoich rejsów + rejsów z przypisanym jachtem
     case 1:
-        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.name AS 'Trip title',  users.username AS 'Captain', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN users ON sailing_trips.user_id = users.id_user JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht JOIN yacht_ownership ON sailing_trips.yacht_id = yacht_ownership.yacht_id WHERE yacht_ownership.owner_id = :uId AND yacht_ownership.ownership_flag IN ('Current', 'CoOwner') ORDER BY sailing_trips.start_datetime DESC");
+        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.trip_name AS 'Trip title',  users.username AS 'Captain', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN users ON sailing_trips.user_id = users.id_user JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht JOIN yacht_ownership ON sailing_trips.yacht_id = yacht_ownership.yacht_id WHERE yacht_ownership.owner_id = :uId AND yacht_ownership.ownership_flag IN ('Current', 'CoOwner') ORDER BY sailing_trips.start_datetime DESC");
         break;
     // 2 - widok tylko rejsów udostępnionych przez innych (sailing_trips.visibility == Public)
     case 2:
-        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.name AS 'Trip title',  users.username AS 'Captain', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN users ON sailing_trips.user_id = users.id_user JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht WHERE sailing_trips.user_id != :uId AND sailing_trips.visibility = 'Public' ORDER BY sailing_trips.start_datetime DESC");
+        query.prepare("SELECT sailing_trips.id_trip, sailing_trips.trip_name AS 'Trip title',  users.username AS 'Captain', yachts.name AS 'Yacht', sailing_trips.start_datetime AS 'Date' FROM sailing_trips JOIN users ON sailing_trips.user_id = users.id_user JOIN yachts ON sailing_trips.yacht_id = yachts.id_yacht WHERE sailing_trips.user_id != :uId AND sailing_trips.visibility = 'Public' ORDER BY sailing_trips.start_datetime DESC");
         break;
     default:
         break;
