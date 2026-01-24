@@ -1,6 +1,9 @@
 #include "tripdatawindow.h"
 #include "ui_tripdatawindow.h"
 
+#include <QMessageBox>
+#include <QSqlError>
+
 TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int viewMode)
     : QDialog(parent)
     , ui(new Ui::TripDataWindow)
@@ -12,16 +15,15 @@ TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int
 
     QSqlQuery tripN(m_db);
     tripN.prepare("SELECT trip_name FROM sailing_trips WHERE id_trip = :tId");
+    tripN.bindValue(":tId", m_tripId);
 
-    if (!tripN.exec()) {
+    if (!tripN.exec() || !tripN.next()) {
         // Handle error (qDebug or QMessageBox)
         qCritical() << "SQL Error:" << tripN.lastError().text(); // Senior Dev Tip: Always log the error text!
+        return;
     }
 
-    QString tName = tripN.value(0).toString();
-
-
-    ui->TripNameTxt->setText(tName);
+    ui->TripNameTxt->setText(tripN.value(0).toString());
 
     // 1. Create the model (Heap allocation, pass 'this' as parent so it auto-deletes)
     QSqlQueryModel *model = new QSqlQueryModel(this);
@@ -31,13 +33,31 @@ TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int
 
     switch (m_viewMode) {
     case 0:
-        query.prepare("SELECT timestamp, longitude, latitude, speed, wind_speed FROM simple_sensor_records WHERE trip_id = :tId");
+        query.prepare(R"(
+            SELECT
+                timestamp,
+                longitude,
+                latitude,
+                speed,
+                wind_speed
+            FROM simple_sensors_records
+            WHERE trip_id = :tId
+            ORDER BY timestamp
+        )");
         break;
     case 1:
-        query.prepare("SELECT simple_sensor_records.timestamp, full_sensor_records.data_json FROM full_sensor_records JOIN simple_sensor_records ON full_sensor_records.id_record = simple_sensor_records.id_record WHERE simple_sensor_records.trip_id = :tId");
+        query.prepare(R"(
+            SELECT
+                f.timestamp,
+                f.data_json
+            FROM full_sensors_records f
+            WHERE f.trip_id = :tId
+            ORDER BY f.timestamp
+        )");
         break;
     default:
-        break;
+        QMessageBox::warning(this, "Invalid view mode", "Unknown data view mode.");
+        return;
     }
 
     query.bindValue(":tId", m_tripId);
@@ -49,7 +69,7 @@ TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int
     }
 
     // 3. Load the model
-    model->setQuery(std::move(query));
+    model->setQuery(query);
 
     // 4. Glue Model to View
     ui->tableView->setModel(model);
@@ -65,6 +85,5 @@ TripDataWindow::~TripDataWindow()
 
 void TripDataWindow::on_closeBTN_clicked()
 {
-    return;
+    close();
 }
-
