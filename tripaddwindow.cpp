@@ -83,12 +83,10 @@ void TripAddWindow::on_buttonBox_accepted()
     trip.prepare(R"(
         INSERT INTO sailing_trips
         (user_id, yacht_id, trip_name, trip_description,
-         start_datetime, end_datetime,
-         trip_data_visibility, visibility)
+         start_datetime, end_datetime, visibility)
         VALUES
         (:uid, :yid, :name, :desc,
-         NOW(), NOW(),
-         'Username', :vis)
+         NOW(), NOW(), :vis)
     )");
 
     trip.bindValue(":uid", m_currentUserId);
