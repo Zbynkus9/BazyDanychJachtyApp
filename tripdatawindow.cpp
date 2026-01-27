@@ -3,6 +3,7 @@
 
 #include <QMessageBox>
 #include <QSqlError>
+#include <qtextedit.h>
 
 TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int viewMode)
     : QDialog(parent)
@@ -12,6 +13,9 @@ TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int
     , m_viewMode(viewMode)
 {
     ui->setupUi(this);
+
+    connect(ui->tableView, &QTableView::doubleClicked,
+            this, &TripDataWindow::showFullJsonDetails);
 
     QSqlQuery tripN(m_db);
     tripN.prepare("SELECT trip_name FROM sailing_trips WHERE id_trip = :tId");
@@ -48,11 +52,12 @@ TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int
     case 1:
         query.prepare(R"(
             SELECT
-                f.timestamp,
+                s.timestamp,
                 f.data_json
             FROM full_sensors_records f
-            WHERE f.trip_id = :tId
-            ORDER BY f.timestamp
+            JOIN simple_sensors_records s ON f.id_record = s.id_record
+            WHERE s.trip_id = :tId
+            ORDER BY s.timestamp
         )");
         break;
     default:
@@ -86,4 +91,27 @@ TripDataWindow::~TripDataWindow()
 void TripDataWindow::on_closeBTN_clicked()
 {
     close();
+}
+
+// 2. Dodaj nową funkcję (zadeklaruj ją też w .h)
+void TripDataWindow::showFullJsonDetails(const QModelIndex &index)
+{
+    // Sprawdź czy kliknięto w kolumnę z JSON (zakładam, że to kolumna 1 w case 1)
+    if (m_viewMode == 1 && index.column() == 1) {
+        QString fullJson = index.data().toString();
+
+        // Wyświetl w ładnym oknie tekstowym
+        QDialog *dlg = new QDialog(this);
+        dlg->setWindowTitle("Pełny zapis SignalK");
+        dlg->resize(600, 400);
+
+        QVBoxLayout *layout = new QVBoxLayout(dlg);
+        QTextEdit *textEdit = new QTextEdit(dlg);
+        textEdit->setText(fullJson);
+        textEdit->setReadOnly(true); // Tylko do odczytu
+
+        layout->addWidget(textEdit);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->show();
+    }
 }

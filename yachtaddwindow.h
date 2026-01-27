@@ -25,6 +25,7 @@ private:
     Ui::YachtAddWindow *ui;
     int m_currentUserId;
     QSqlDatabase m_db;
+    QLocale locale;
 };
 
 #endif // YACHTADDWINDOW_H

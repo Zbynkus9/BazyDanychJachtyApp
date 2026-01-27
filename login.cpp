@@ -55,7 +55,7 @@ void LoginScreen::on_LoginBTN_clicked()
            if (usernameFromDB == username && passwordFromDB == password) {
                QMessageBox::information(this, "Success", "Login succesful");
                int userID = query.value(2).toInt();
-               emit loginSuccessful(userID);
+               emit loginSuccessful(userID, username);
 
                // Close the login screen so main.cpp knows to move on
                this->accept();

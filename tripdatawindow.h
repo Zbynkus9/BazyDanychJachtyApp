@@ -24,6 +24,7 @@ private:
     QSqlDatabase m_db;
     int m_tripId;
     int m_viewMode;
+    void showFullJsonDetails(const QModelIndex &index);
 };
 
 #endif // TRIPDATAWINDOW_H

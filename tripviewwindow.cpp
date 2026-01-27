@@ -14,12 +14,15 @@ TripViewWindow::TripViewWindow(QWidget *parent, int userId, QSqlDatabase db, int
     // 1. Create the model (Heap allocation, pass 'this' as parent so it auto-deletes)
     QSqlQueryModel *model = new QSqlQueryModel(this);
 
+    qDebug() << "Window type: " << view_type;
+
     // 2. Prepare the complex query
     QSqlQuery query(m_db);
     // Zależnie od view type różne widoki
     switch (view_type) {
     // 0 - widok tylko swoich rejsów (trips.user_id == m_currentUserId)
     case 0:
+        qDebug() << "Case 0";
         query.prepare("SELECT "
                   "id_trip, "           // Kolumna 0: Potrzebna dla logiki (ukryjemy ją)
                   "`Nazwa Rejsu`, "     // Kolumna 1
@@ -29,11 +32,12 @@ TripViewWindow::TripViewWindow(QWidget *parent, int userId, QSqlDatabase db, int
                   "`Minuty_Trwania`, "  // Kolumna 5
                   "`Liczba_Próbek` "    // Kolumna 6
                   "FROM view_trip_dashboard "
-                  "WHERE id_kapitana = :uid "  // Filtrujemy tylko moje rejsy
+                  "WHERE id_kapitana = :uId "  // Filtrujemy tylko moje rejsy
                   "ORDER BY Start DESC");
         break;
     // 1 - widok swoich rejsów + rejsów z przypisanym jachtem
     case 1:
+        qDebug() << "Case 1";
         query.prepare("SELECT "
                       "id_trip, "           // W widoku kolumny są unikalne, nie musisz pisać nazwy tabeli
                       "`Nazwa Rejsu`, "
@@ -48,6 +52,7 @@ TripViewWindow::TripViewWindow(QWidget *parent, int userId, QSqlDatabase db, int
         break;
     // 2 - widok tylko rejsów udostępnionych przez innych (sailing_trips.visibility == Public)
     case 2:
+        qDebug() << "Case 2";
         query.prepare("SELECT "
                       "id_trip, "           // Kolumna 0 (ukryta)
                       "`Nazwa Rejsu`, "
@@ -145,4 +150,6 @@ void TripViewWindow::on_ShowComplexDataBTN_clicked()
     window->setAttribute(Qt::WA_DeleteOnClose);
     window->show();
 }
+
+
 

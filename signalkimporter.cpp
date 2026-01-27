@@ -115,19 +115,20 @@ bool SignalKImporter::importDirectory(
             return false;
         }
 
+        int sensorDataId = qSimple.lastInsertId().toInt();
+
         // ---------- Insert FULL ----------
         QSqlQuery qFull(db);
         qFull.prepare(R"(
             INSERT INTO full_sensors_records
-            (trip_id, timestamp, data_json)
-            VALUES (:tripId, :ts, :json)
+            (id_record, data_json)
+            VALUES (:rId, :json)
         )");
 
         QString jsonText = QString::fromUtf8(rawJson);
 
-        qFull.bindValue(":tripId", tripId);
-        qFull.bindValue(":ts", ts);
         qFull.bindValue(":json", jsonText);
+        qFull.bindValue(":rId", sensorDataId);
 
         if (!qFull.exec()) {
             errorMessage = qFull.lastError().text();

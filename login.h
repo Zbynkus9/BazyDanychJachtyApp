@@ -18,7 +18,7 @@ public:
 
 signals:
     // We don't write a body for this function, Qt does it automatically.
-    void loginSuccessful(int userId);
+    void loginSuccessful(int userId, QString username);
 
 private slots:
     void on_LoginBTN_clicked();

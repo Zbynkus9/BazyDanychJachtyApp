@@ -15,7 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, int userId = -1, QSqlDatabase db = QSqlDatabase());
+    MainWindow(QWidget *parent = nullptr, int userId = -1, QSqlDatabase db = QSqlDatabase(), QString uName = "null");
     ~MainWindow();
 
 private slots:
@@ -36,5 +36,6 @@ private:
     Ui::MainWindow *ui;
     int m_currentUserId;
     QSqlDatabase m_db;
+    QString m_uName;
 };
 #endif // MAINWINDOW_H

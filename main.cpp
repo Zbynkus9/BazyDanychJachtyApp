@@ -29,10 +29,10 @@ int main(int argc, char *argv[])
     MainWindow *w = nullptr;
 
     // 5. THE WIRING: Connect Login Success Signal to Main Window Creation
-    QObject::connect(&login, &LoginScreen::loginSuccessful, [&](int userId){
+    QObject::connect(&login, &LoginScreen::loginSuccessful, [&](int userId, QString username){
 
         // Create Main Window on Heap
-        w = new MainWindow(nullptr, userId, dbManager.db());
+        w = new MainWindow(nullptr, userId, dbManager.db(), username);
 
         // Ensure memory is cleaned up when user closes Main Window
         w->setAttribute(Qt::WA_DeleteOnClose);

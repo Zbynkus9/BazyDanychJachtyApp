@@ -7,11 +7,12 @@
 #include <QMessageBox>
 
 
-MainWindow::MainWindow(QWidget *parent, int userId, QSqlDatabase db)
+MainWindow::MainWindow(QWidget *parent, int userId, QSqlDatabase db, QString uName)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , m_currentUserId(userId) // Save the ID
     , m_db(db)                // Save the Connection
+    , m_uName(uName)
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -20,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent, int userId, QSqlDatabase db)
 
     // UI is now ready.
     // Example: ui->labelUser->setText("User ID: " + QString::number(m_currentUserId));
-    ui->WindowLabel->setText("User ID: " + QString::number(m_currentUserId));
+    //ui->WindowLabel->setText("User ID: " + QString::number(m_currentUserId));
+    ui->WindowLabel->setText("Welcome: " + m_uName);
     qDebug() << m_currentUserId;
 
 }
