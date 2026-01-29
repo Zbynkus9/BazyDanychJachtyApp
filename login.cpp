@@ -11,10 +11,10 @@ LoginScreen::LoginScreen(QWidget *parent, QSqlDatabase db)
 {
     login_ui->setupUi(this);
 
-    // Create a regex that allows digits (0-9) and repeats 1 to 9 times
+    // Regex
     QRegularExpression rx("^[0-9]{1,9}$");
 
-    // Create the validator
+    // Validator
     QValidator *validator = new QRegularExpressionValidator(rx, this);
 
     login_ui->RegNrText->setValidator(validator);
@@ -57,7 +57,6 @@ void LoginScreen::on_LoginBTN_clicked()
                int userID = query.value(2).toInt();
                emit loginSuccessful(userID, username);
 
-               // Close the login screen so main.cpp knows to move on
                this->accept();
             }
            else {
@@ -90,7 +89,6 @@ void LoginScreen::on_RegisterBTN_clicked()
         }
         else {
             if (mailCheck.next()) {
-                // show that mail used
                 QMessageBox::information(this, "Failed", "Email already used");
                 return;
             }
@@ -111,7 +109,6 @@ void LoginScreen::on_RegisterBTN_clicked()
             }
             else {
                 if (nickCheck.next()) {
-                    // show that username used
                     QMessageBox::information(this, "Failed", "Username already used");
                     return;
                 }
@@ -125,7 +122,7 @@ void LoginScreen::on_RegisterBTN_clicked()
 
         if (fname.length() == 0 || lname.length() == 0 || password.length() == 0) { QMessageBox::information(this, "Failed", "Enter credentials"); }
         else {
-            //instert record into users
+            // Zapisujemy do users
             QSqlQuery registerUser (m_db);
             if (phone.length() == 0){
                 registerUser.prepare("INSERT INTO users (first_name, last_name, email, username, password) VALUES (:fname, :lname, :mail, :username, :password)");

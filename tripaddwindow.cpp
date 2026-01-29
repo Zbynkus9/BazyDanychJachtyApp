@@ -19,7 +19,7 @@ TripAddWindow::TripAddWindow(QWidget *parent, int userId, QSqlDatabase db)
     m_startPath = QDir::homePath();
     m_selectedDirectory.clear();
 
-    // ---- Load yachts for user ----
+    // Wczytujemy jachty
     QSqlQuery yachts(m_db);
         yachts.prepare(R"(
         SELECT y.id_yacht AS yId, y.name AS yName
@@ -72,13 +72,12 @@ void TripAddWindow::on_buttonBox_accepted()
 
     QString visibility = ui->VisibilityComboBox->currentText();
 
-    // ---- Start transaction ----
+    // Transakcja
     if (!m_db.transaction()) {
         QMessageBox::critical(this, "Database error", "Failed to start transaction.");
         return;
     }
 
-    // ---- Insert trip ----
     QSqlQuery trip(m_db);
     trip.prepare(R"(
         INSERT INTO sailing_trips
@@ -104,7 +103,7 @@ void TripAddWindow::on_buttonBox_accepted()
 
     int tripId = trip.lastInsertId().toInt();
 
-    // ---- Import Signal K data ----
+    // Odpalamy SignalKImporter
     QString importError;
     bool importOk = SignalKImporter::importDirectory(
         m_db,
@@ -119,7 +118,7 @@ void TripAddWindow::on_buttonBox_accepted()
         return;
     }
 
-    // ---- Commit ----
+    // Commit
     if (!m_db.commit()) {
         QMessageBox::critical(this, "Database error", "Failed to commit transaction.");
         return;

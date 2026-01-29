@@ -6,8 +6,8 @@
 YachtAddWindow::YachtAddWindow(QWidget *parent, int userId, QSqlDatabase db)
     : QDialog(parent)
     , ui(new Ui::YachtAddWindow)
-    , m_currentUserId(userId) // Save the ID
-    , m_db(db)                // Save the Connection
+    , m_currentUserId(userId)
+    , m_db(db)
 {
     ui->setupUi(this);
 
@@ -34,7 +34,6 @@ YachtAddWindow::~YachtAddWindow()
 //     QString yClass = ui->ClassText->text();
 //     QString yLength = ui ->LengthText->text();
 //     bool ok;
-//     // 2. Próba konwersji tekstu na float zgodnie z ustawieniami systemu
 //     float yLengthF = locale.toFloat(yLength, &ok);
 
 //     // 3. Sprawdzenie czy się udało
@@ -152,7 +151,7 @@ YachtAddWindow::~YachtAddWindow()
 
 void YachtAddWindow::on_buttonBox_accepted()
 {
-    // 1. Pobierz surowe teksty
+    // 1. Pobieramy surowe teksty
     QString sName = ui->NameText->text();
     QString sClass = ui->ClassText->text();
     QString sLength = ui->LengthText->text();
@@ -167,23 +166,21 @@ void YachtAddWindow::on_buttonBox_accepted()
     }
 
     // 3. PANCERNA KONWERSJA (Lambda helper)
-    // To zamienia "12,5" na "12.5" i "12.5" zostawia jako "12.5"
     bool conversionOk = true;
     auto toFloat = [&](QString str) -> float {
-        str.replace(",", "."); // Zamień przecinek na kropkę
+        str.replace(",", "."); // Zamieniamy przecinek na kropkę
         bool ok;
         float val = str.toFloat(&ok);
-        if (!ok) conversionOk = false; // Ustaw flagę błędu
+        if (!ok) conversionOk = false; // Ustawiamy flagę błędu
         return val;
     };
 
-    // Konwertujemy wszystko na liczby PRZED zapytaniem
     float valLength = toFloat(sLength);
     float valSail = toFloat(sSail);
     float valDraftMin = toFloat(sDraftMin);
     float valDraftMax = toFloat(sDraftMax);
 
-    // Sprawdź czy konwersja się udała
+    // Sprawdzamy czy konwersja się udała
     if (!conversionOk) {
         QMessageBox::warning(this, "Błąd formatu", "Wpisz poprawne liczby (np. 12.5 lub 12,5)!");
         return;
@@ -200,7 +197,6 @@ void YachtAddWindow::on_buttonBox_accepted()
     qYacht.bindValue(":n", sName);
     qYacht.bindValue(":c", sClass);
 
-    // UWAGA: Tu musisz podać zmienne float (val...), a nie QStringi (s...)!
     qYacht.bindValue(":l", valLength);
     qYacht.bindValue(":s", valSail);
     qYacht.bindValue(":dmin", valDraftMin);
@@ -226,7 +222,7 @@ void YachtAddWindow::on_buttonBox_accepted()
     // Czy na pewno dostaliśmy poprawne ID? Jeśli to jest 0 lub invalid, INSERT ownership padnie.
     int newYachtId = qYacht.lastInsertId().toInt();
 
-    // Sprawdź w konsoli co tu wyszło
+    // Sprawdzamy w konsoli co tu wyszło
     qDebug() << "DEBUG: Nowe ID Jachtu:" << newYachtId;
     qDebug() << "DEBUG: ID Usera:" << m_currentUserId;
 
@@ -249,10 +245,10 @@ void YachtAddWindow::on_buttonBox_accepted()
     if (!qOwner.exec()) {
         m_db.rollback();
 
-        // Pobierz błąd z zapytania
+        // Pobieramy błąd z zapytania
         QString queryErr = qOwner.lastError().text();
 
-        // Pobierz błąd z SAMEJ BAZY DANYCH (często tu kryje się prawda przy pustym queryErr)
+        // Pobieramy błąd z SAMEJ BAZY DANYCH (często tu kryje się prawda przy pustym queryErr)
         QString dbErr = m_db.lastError().text();
 
         qDebug() << "--- BŁĄD INSERT OWNERSHIP ---";
@@ -278,7 +274,7 @@ void YachtAddWindow::on_buttonBox_accepted()
 
 void YachtAddWindow::on_buttonBox_rejected()
 {
-    // just close and do nothing
+    // Po prostu wyłączamy
     return;
 }
 

@@ -8,7 +8,7 @@
 TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int viewMode)
     : QDialog(parent)
     , ui(new Ui::TripDataWindow)
-    , m_db(db)                // Save the Connection
+    , m_db(db)
     , m_tripId(tripId)
     , m_viewMode(viewMode)
 {
@@ -22,17 +22,14 @@ TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int
     tripN.bindValue(":tId", m_tripId);
 
     if (!tripN.exec() || !tripN.next()) {
-        // Handle error (qDebug or QMessageBox)
-        qCritical() << "SQL Error:" << tripN.lastError().text(); // Senior Dev Tip: Always log the error text!
+        qCritical() << "SQL Error:" << tripN.lastError().text();
         return;
     }
 
     ui->TripNameTxt->setText(tripN.value(0).toString());
 
-    // 1. Create the model (Heap allocation, pass 'this' as parent so it auto-deletes)
     QSqlQueryModel *model = new QSqlQueryModel(this);
 
-    // 2. Prepare the complex query
     QSqlQuery query(m_db);
 
     switch (m_viewMode) {
@@ -68,18 +65,14 @@ TripDataWindow::TripDataWindow(QWidget *parent, int tripId, QSqlDatabase db, int
     query.bindValue(":tId", m_tripId);
 
     if (!query.exec()) {
-        // Handle error (qDebug or QMessageBox)
-        qCritical() << "SQL Error:" << query.lastError().text(); // Senior Dev Tip: Always log the error text!
+        qCritical() << "SQL Error:" << query.lastError().text();
         return;
     }
 
-    // 3. Load the model
     model->setQuery(query);
 
-    // 4. Glue Model to View
     ui->tableView->setModel(model);
 
-    // Optional: Adjust column widths to look nice
     ui->tableView->resizeColumnsToContents();
 }
 
@@ -93,14 +86,13 @@ void TripDataWindow::on_closeBTN_clicked()
     close();
 }
 
-// 2. Dodaj nową funkcję (zadeklaruj ją też w .h)
 void TripDataWindow::showFullJsonDetails(const QModelIndex &index)
 {
-    // Sprawdź czy kliknięto w kolumnę z JSON (zakładam, że to kolumna 1 w case 1)
+    // Sprawdzamy czy kliknięto w kolumnę z JSON
     if (m_viewMode == 1 && index.column() == 1) {
         QString fullJson = index.data().toString();
 
-        // Wyświetl w ładnym oknie tekstowym
+        // Wyświetlamy w nowym oknie
         QDialog *dlg = new QDialog(this);
         dlg->setWindowTitle("Pełny zapis SignalK");
         dlg->resize(600, 400);
@@ -108,7 +100,7 @@ void TripDataWindow::showFullJsonDetails(const QModelIndex &index)
         QVBoxLayout *layout = new QVBoxLayout(dlg);
         QTextEdit *textEdit = new QTextEdit(dlg);
         textEdit->setText(fullJson);
-        textEdit->setReadOnly(true); // Tylko do odczytu
+        textEdit->setReadOnly(true);
 
         layout->addWidget(textEdit);
         dlg->setAttribute(Qt::WA_DeleteOnClose);

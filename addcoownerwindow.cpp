@@ -5,8 +5,8 @@
 AddCoOwnerWindow::AddCoOwnerWindow(QWidget *parent, int userId, QSqlDatabase db)
     : QDialog(parent)
     , ui(new Ui::AddCoOwnerWindow)
-    , m_currentUserId(userId) // Save the ID
-    , m_db(db)                // Save the Connection
+    , m_currentUserId(userId)
+    , m_db(db)
 {
     ui->setupUi(this);
 
@@ -15,14 +15,13 @@ AddCoOwnerWindow::AddCoOwnerWindow(QWidget *parent, int userId, QSqlDatabase db)
     yachts.bindValue(":currentUserId", m_currentUserId);
 
     if (!yachts.exec()) {
-        // Handle error (qDebug or QMessageBox)
-        qCritical() << "SQL Error:" << yachts.lastError().text(); // Senior Dev Tip: Always log the error text!
+        qCritical() << "SQL Error:" << yachts.lastError().text();
     }
 
     while (yachts.next()) {
         QString yName = yachts.value("yName").toString();
         int yId = yachts.value("yId").toInt();
-        ui->YachtComboBox->addItem(yName, yId); // Store ID as "UserRole" data
+        ui->YachtComboBox->addItem(yName, yId);
     }
 }
 
@@ -34,7 +33,7 @@ AddCoOwnerWindow::~AddCoOwnerWindow()
 void AddCoOwnerWindow::on_buttonBox_accepted()
 {
     QString user = ui->UsernameText->text();
-    // Pobieramy ID jachtu (zakładam, że jest przechowywane jako UserRole w ComboBox)
+    // Pobieramy ID jachtu
     int selectedYacht = ui->YachtComboBox->itemData(ui->YachtComboBox->currentIndex()).toInt();
     int uId = -1;
 
@@ -43,7 +42,7 @@ void AddCoOwnerWindow::on_buttonBox_accepted()
         return;
     }
 
-    // 1. Sprawdź czy użytkownik istnieje
+    // 1. Sprawdzamy czy użytkownik istnieje
     QSqlQuery userCheck(m_db);
     userCheck.prepare("SELECT id_user FROM users WHERE username = :username");
     userCheck.bindValue(":username", user);
@@ -56,7 +55,7 @@ void AddCoOwnerWindow::on_buttonBox_accepted()
     if (userCheck.next()) {
         uId = userCheck.value(0).toInt();
 
-        // 2. Sprawdź czy jest już AKTYWNYM właścicielem (Current lub CoOwner)
+        // 2. Sprawdzamy czy użytkowkik jest już aktywnym właścicielem
         QSqlQuery activeOwnerCheck(m_db);
         activeOwnerCheck.prepare("SELECT 1 FROM yacht_ownership WHERE func_is_active_owner(:uId, :yId) = 1");
         activeOwnerCheck.bindValue(":yId", selectedYacht);
@@ -68,13 +67,13 @@ void AddCoOwnerWindow::on_buttonBox_accepted()
         }
 
         if (activeOwnerCheck.next()) {
-            // Użytkownik JUŻ JEST właścicielem
+            // Jeżeli już jest właścicielem
             QMessageBox::warning(this, "Error", "User is already an owner or co-owner of this yacht.");
             return;
         }
         else {
-            // Użytkownik NIE JEST aktywnym właścicielem.
-            // 3. Sprawdź czy był PRZESZŁYM właścicielem (Past)
+            // Jeżeli nie jest właścicielem
+            // 3. Sprawdzamy, czy byl właścicielem w przeszłości
             QSqlQuery pastOwnerCheck(m_db);
             pastOwnerCheck.prepare("SELECT id_ownership FROM yacht_ownership "
                                    "WHERE yacht_id = :yId AND owner_id = :uId AND ownership_flag = 'Past'");
@@ -87,7 +86,7 @@ void AddCoOwnerWindow::on_buttonBox_accepted()
             }
 
             if (pastOwnerCheck.next()) {
-                // SCENARIUSZ A: Znaleziono rekord 'Past' -> AKTUALIZACJA (Przywrócenie)
+                // Był już właścicielem w przeszłości
                 int recordId = pastOwnerCheck.value(0).toInt();
 
                 QSqlQuery updateQuery(m_db);
@@ -103,7 +102,7 @@ void AddCoOwnerWindow::on_buttonBox_accepted()
                 QMessageBox::information(this, "Success", "User restored from Past Owner to CoOwner.");
             }
             else {
-                // SCENARIUSZ B: Brak historii -> NOWY WPIS (Insert)
+                // Nie był jeszcze właścicielem w przeszłości
                 QSqlQuery insertQuery(m_db);
                 insertQuery.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) "
                                     "VALUES (:yId, :oId, 'CoOwner', NOW())");

@@ -29,7 +29,7 @@ private:
     Ui::YachtOwnershipWindow *ui;
     int m_currentUserId;
     QSqlDatabase m_db;
-    void refreshTable(); // Dodaj deklarację
+    void refreshTable();
     QSqlQueryModel *model;
 };
 

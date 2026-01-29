@@ -5,8 +5,8 @@
 SelectYachtWindow::SelectYachtWindow(QWidget *parent, int userId, QSqlDatabase db)
     : QDialog(parent)
     , ui(new Ui::SelectYachtWindow)
-    , m_currentUserId(userId) // Save the ID
-    , m_db(db)                // Save the Connection
+    , m_currentUserId(userId)
+    , m_db(db)
 {
     ui->setupUi(this);
 
@@ -15,14 +15,13 @@ SelectYachtWindow::SelectYachtWindow(QWidget *parent, int userId, QSqlDatabase d
     yachts.bindValue(":currentUserId", m_currentUserId);
 
     if (!yachts.exec()) {
-        // Handle error (qDebug or QMessageBox)
-        qCritical() << "SQL Error:" << yachts.lastError().text(); // Senior Dev Tip: Always log the error text!
+        qCritical() << "SQL Error:" << yachts.lastError().text();
     }
 
     while (yachts.next()) {
         QString yName = yachts.value("yName").toString();
         int yId = yachts.value("yId").toInt();
-        ui->YachtComboBox->addItem(yName, yId); // Store ID as "UserRole" data
+        ui->YachtComboBox->addItem(yName, yId);
     }
 }
 
@@ -34,14 +33,9 @@ SelectYachtWindow::~SelectYachtWindow()
 void SelectYachtWindow::on_buttonBox_accepted()
 {
     int selectedYacht = ui->YachtComboBox->itemData(ui->YachtComboBox->currentIndex()).toInt();
-    // open RemoveCoOwnerWindow QDialog Widget and pass selected Yacht Id
-    // 1. Create the instance (Stack allocation)
-    // Pass 'this' as parent so it centers over the Main Window
     RemoveCoOwnerWindow dialog(this, m_currentUserId, selectedYacht, m_db);
 
-    // 2. Launch it effectively "freezing" the code here until the dialog closes
     if (dialog.exec() == QDialog::Accepted) {
-        // Skoro małe okno dało OK, to ja (pośrednik) też daję OK i się zamykam
         this->accept();
     }
 }

@@ -5,8 +5,8 @@
 ChangeOwnerWindow::ChangeOwnerWindow(QWidget *parent, int userId, QSqlDatabase db)
     : QDialog(parent)
     , ui(new Ui::ChangeOwnerWindow)
-    , m_currentUserId(userId) // Save the ID
-    , m_db(db)                // Save the Connection
+    , m_currentUserId(userId)
+    , m_db(db)
 {
     ui->setupUi(this);
 
@@ -15,14 +15,13 @@ ChangeOwnerWindow::ChangeOwnerWindow(QWidget *parent, int userId, QSqlDatabase d
     yachts.bindValue(":currentUserId", m_currentUserId);
 
     if (!yachts.exec()) {
-        // Handle error (qDebug or QMessageBox)
-        qCritical() << "SQL Error:" << yachts.lastError().text(); // Senior Dev Tip: Always log the error text!
+        qCritical() << "SQL Error:" << yachts.lastError().text();
     }
 
     while (yachts.next()) {
         QString yName = yachts.value("yName").toString();
         int yId = yachts.value("yId").toInt();
-        ui->YachtComboBox->addItem(yName, yId); // Store ID as "UserRole" data
+        ui->YachtComboBox->addItem(yName, yId);
     }
 }
 
@@ -38,7 +37,7 @@ void ChangeOwnerWindow::on_buttonBox_accepted()
     int uId = -1;
     if (user.length() == 0) { QMessageBox::information(this, "Failed", "Enter username"); }
     else {
-        // Check if user exists "SELECT id_user, username FROM users"
+        // Sprawdzamy, czy użytkownik istnieje
         QSqlQuery userCheck (m_db);
 
         userCheck.prepare("SELECT id_user, username FROM users WHERE username = :username");
@@ -58,7 +57,6 @@ void ChangeOwnerWindow::on_buttonBox_accepted()
                     query.bindValue(":oId", uId);
 
                     if (!query.exec()) {
-                        // Show Error
                         QMessageBox::information(this, "Failed", "Failed to transfer ownership");
                         return;
                     }
@@ -73,8 +71,6 @@ void ChangeOwnerWindow::on_buttonBox_accepted()
         }
     }
 
-    //
-    // 2. make selected user new Owner
     /* QSqlQuery qOwner(m_db);
     qOwner.prepare("INSERT INTO yacht_ownership (yacht_id, owner_id, ownership_flag, update_time) VALUES (:yId, :oId, :oFlag, :uTime)");
     qOwner.bindValue(":yId", yId);

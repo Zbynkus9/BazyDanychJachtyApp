@@ -29,13 +29,12 @@ private slots:
 private:
     Ui::TripAddWindow *ui;
 
-    // ---- Core state ----
     int m_currentUserId;
     QSqlDatabase m_db;
 
     // ---- Directory handling ----
-    QString m_selectedDirectory; // chosen folder with JSON files
-    QString m_startPath;         // initial path for file dialog
+    QString m_selectedDirectory;
+    QString m_startPath;
 };
 
 #endif // TRIPADDWINDOW_H
